@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MeowAPI - Enabled</title>
+<style>
+  :root {
+    --bg1: #04140d;
+    --bg2: #072515;
+    --accent: #1dd672;
+    --text: #e6ffee;
+    --muted: #a8d8bb;
+    --glass: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.08);
+  }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    background: radial-gradient(circle at top left, var(--bg1), var(--bg2));
+    color: var(--text);
+  }
+
+  .wrap {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1b5d3e, #0f261a);
+    box-shadow: 0 0 18px rgba(0,0,0,0.5);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+  }
+
+  .input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  #uuidInput {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    width: 280px;
+    outline: none;
+    font-size: 14px;
+  }
+
+  #uuidInput::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+
+  .show-btn {
+    background: linear-gradient(135deg, #1dd672 0%, #0fa36b 100%);
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    color: #0a1b13;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    align-self: center;
+    box-shadow: 0 0 10px rgba(29,214,114,0.3), inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: all 0.25s ease;
+  }
+
+  .show-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 0 20px rgba(29,214,114,0.45);
+  }
+
+  .muted {
+    color: var(--muted);
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="avatar">
+      <img id="avatarImg" 
+           src="https://skin.laby.net/api/render/user/38a27d59-1c8d-4eb2-a27c-530612b07cfb.png?shadow=true&bust=true" 
+           alt="avatar" 
+           onerror="this.src='https://via.placeholder.com/64/1dd672/FFFFFF?text=?'">
+    </div>
+    <div>
+      <h1 id="oneLine">—</h1>
+      <div class="subtitle">MeowAPI - Enabled</div>
+    </div>
+  </header>
+
+  <div class="card input-box">
+    <input type="text" id="uuidInput" placeholder="Enter Username">
+    <button class="show-btn" id="refreshBtn">Show Stats</button>
+  </div>
+
+  <div class="card">
+    <div id="output" class="muted">Enter username above...</div>
+  </div>
+</div>
+
+<script>
+function minecraftColorToHtml(text) {
+  const colorMap = {
+    '0': '#000000','1': '#0000AA','2': '#00AA00','3': '#00AAAA',
+    '4': '#AA0000','5': '#AA00AA','6': '#FFAA00','7': '#AAAAAA',
+    '8': '#555555','9': '#5555FF','a': '#55FF55','b': '#55FFFF',
+    'c': '#FF5555','d': '#FF55FF','e': '#FFFF55','f': '#FFFFFF'
+  };
+  if (!text) return "";
+  return text
+    .replace(/§([0-9a-f])/g, (_, c) => `<span style="color:${colorMap[c]||'#fff'}">`)
+    .replace(/§r/g, '</span>') + '</span>';
+}
+
+function addHyphens(uuid) {
+  return uuid.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, "$1-$2-$3-$4-$5");
+}
+
+function cleanName(name) {
+  if (!name) return "";
+  return name.replace(/[✪✿✦⚚➎★☆◆◇■□●○◎☀☁☂☃☄☾☽♛♕♚♔♤♡♢♧♠♥♦♣⚜⚡✨❖⬥⬦⬧⬨⬩⭐🌟🟊]+/g, "").trim();
+}
+
+function formatCoins(num) {
+  if (!isFinite(num)) return "0";
+  if (num >= 1e9) return (num / 1e9).toFixed(2) + "B";
+  if (num >= 1e6) return (num / 1e6).toFixed(2) + "M";
+  if (num >= 1e3) return (num / 1e3).toFixed(1) + "K";
+  return Math.floor(num).toString();
+}
+
+async function fetchStats() {
+  const input = document.getElementById('uuidInput');
+  const avatarImg = document.getElementById('avatarImg');
+  const oneLine = document.getElementById('oneLine');
+  const out = document.getElementById('output');
+  const username = input.value.trim();
+
+  if (!username) {
+    out.textContent = "⚠️ Enter a username.";
+    return;
+  }
+
+  out.textContent = "Fetching data...";
+  oneLine.textContent = "Loading...";
+
+  try {
+    const playerRes = await fetch(`https://api.soopy.dev/player/${encodeURIComponent(username)}`);
+    const playerJson = await playerRes.json();
+    if (!playerJson.success || !playerJson.data) throw new Error("Invalid player data");
+
+    const uuidRaw = playerJson.data.uuid || "";
+    const uuid = uuidRaw.replace(/-/g, "");
+    const uuidHyphen = addHyphens(uuid);
+
+    const prefix = playerJson.data.prefix || "";
+    const name = playerJson.data.name || playerJson.data.username || username;
+    const nameWithPrefix = playerJson.data.stats?.nameWithPrefix || playerJson.data.nameWithPrefix || (prefix ? `${prefix} ${name}` : name);
+    const formattedName = minecraftColorToHtml(nameWithPrefix);
+
+    // Set skin preview
+    avatarImg.src = `https://skin.laby.net/api/render/user/${uuidHyphen}.png?shadow=true&bust=true`;
+
+    // Achievements
+    const ach = playerJson.data.achievements || {};
+    const skywarsStars = ach.skywars_you_re_a_star || 0;
+    const arcadeCoins = ach.arcade_arcade_banker || 0;
+    const bedwarsStars = ach.bedwars_level || 0;
+    const uhcBounty = ach.uhc_bounty || 0;
+    const pitGold = ach.pit_gold || 0;
+
+    const skyRes = await fetch(`https://soopy.dev/api/v2/player_skyblock/${uuid}?networth=true`);
+    const skyJson = await skyRes.json();
+
+    let coins = 0, kills = 0, fairy = 0, types = {};
+    try {
+      const pid = skyJson.data?.stats?.currentProfileId;
+      const profiles = skyJson.data?.profiles || {};
+      const member = profiles[pid]?.members?.[uuid] || {};
+      coins = member.coin_purse || 0;
+      kills = member.kills?.total || 0;
+      fairy = member.fairy_souls_collected || 0;
+      types = member.nwDetailed?.types || {};
+    } catch {}
+
+    const collectItems = (t) => (t?.items?.length ? t.items.map(i => cleanName(i.name)) : []);
+    const sections = [
+      ...collectItems(types.armor),
+      ...collectItems(types.equipment),
+      ...collectItems(types.wardrobe),
+      ...collectItems(types.weapons),
+      ...collectItems(types.inventory)
+    ];
+    const itemList = sections.length ? sections.join(", ") : "";
+
+    const parts = [];
+    if (skywarsStars > 0) parts.push(`SW: ${skywarsStars}`);
+    if (arcadeCoins > 0) parts.push(`Arcade_Coins: ${formatCoins(arcadeCoins)}`);
+    if (bedwarsStars > 0) parts.push(`BW: ${bedwarsStars}`);
+    if (uhcBounty > 0) parts.push(`UHC_Bounty: ${formatCoins(uhcBounty)}`);
+    if (pitGold > 0) parts.push(`Pit_Coins: ${formatCoins(pitGold)}`);
+    if (coins > 0) parts.push(`Sb_Coins: ${formatCoins(coins)} Coins`);
+    if (kills > 0) parts.push(`Sb_Kills: ${kills}`);
+    if (fairy > 0) parts.push(`Sb_Fairy_Souls: ${fairy}`);
+    if (itemList) parts.push(`Sb_Valuable_Items: ${itemList}`);
+
+    oneLine.innerHTML = formattedName || name;
+    out.textContent = parts.join(" ") || "None";
+  } catch (err) {
+    console.error(err);
+    out.textContent = "❌ Failed to fetch stats.";
+    oneLine.textContent = "—";
+  }
+}
+
+document.getElementById('refreshBtn').addEventListener('click', fetchStats);
+document.getElementById('uuidInput').addEventListener('keypress', e => {
+  if (e.key === 'Enter') fetchStats();
+});
+</script>
+</body>
+</html>

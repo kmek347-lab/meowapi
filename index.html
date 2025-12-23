@@ -1,391 +1,514 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="utf-8" />
-
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-
-<title>MeowAPI - Enabled (Dynamic Profile)</title>
-
-<style>
-
-  :root {
-
-    --bg1: #04140d;
-
-    --bg2: #072515;
-
-    --accent: #1dd672;
-
-    --text: #e6ffee;
-
-    --muted: #a8d8bb;
-
-    --glass: rgba(255,255,255,0.06);
-
-    --border: rgba(255,255,255,0.08);
-
-  }
-
-
-
-  html, body {
-
-    height: 100%;
-
-    margin: 0;
-
-    font-family: Inter, system-ui, sans-serif;
-
-    background: radial-gradient(circle at top left, var(--bg1), var(--bg2));
-
-    color: var(--text);
-
-  }
-
-
-
-  .wrap {
-
-    max-width: 900px;
-
-    margin: 40px auto;
-
-    padding: 20px;
-
-  }
-
-
-
-  header {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 16px;
-
-    margin-bottom: 20px;
-
-  }
-
-
-
-  .avatar {
-
-    width: 70px;
-
-    height: 70px;
-
-    border-radius: 14px;
-
-    overflow: hidden;
-
-    background: linear-gradient(135deg, #1b5d3e, #0f261a);
-
-    box-shadow: 0 0 18px rgba(0,0,0,0.5);
-
-  }
-
-
-
-  .avatar img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-  }
-
-
-
-  h1 {
-
-    font-size: 20px;
-
-    margin: 0;
-
-    font-weight: 700;
-
-  }
-
-
-
-  .subtitle {
-
-    color: var(--muted);
-
-    font-size: 13px;
-
-    margin-top: 6px;
-
-  }
-
-  
-
-  .subtitle.profile-name {
-    color: var(--accent);
-    font-weight: 600;
-  }
-
-
-  .card {
-
-    background: var(--glass);
-
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
-
-    padding: 20px;
-
-    margin-bottom: 16px;
-
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-
-    backdrop-filter: blur(25px);
-
-    -webkit-backdrop-filter: blur(25px);
-
-  }
-
-
-
-  .input-box {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-
-    align-items: flex-start;
-
-  }
-
-
-
-  #uuidInput {
-
-    padding: 10px 14px;
-
-    border-radius: 10px;
-
-    border: 1px solid rgba(255,255,255,0.15);
-
-    background: rgba(255,255,255,0.08);
-
-    color: #fff;
-
-    width: 280px;
-
-    outline: none;
-
-    font-size: 14px;
-
-  }
-
-
-
-  #uuidInput::placeholder {
-
-    color: rgba(255,255,255,0.3);
-
-  }
-
-
-
-  .show-btn {
-
-    background: linear-gradient(135deg, #1dd672 0%, #0fa36b 100%);
-
-    border: none;
-
-    padding: 14px 24px;
-
-    border-radius: 12px;
-
-    color: #0a1b13;
-
-    font-weight: 700;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    align-self: center;
-
-    box-shadow: 0 0 10px rgba(29,214,114,0.3), inset 0 1px 0 rgba(255,255,255,0.25);
-
-    transition: all 0.25s ease;
-
-  }
-
-
-
-  .show-btn:hover {
-
-    transform: translateY(-2px) scale(1.05);
-
-    box-shadow: 0 0 20px rgba(29,214,114,0.45);
-
-  }
-
-
-
-  .muted {
-
-    color: var(--muted);
-
-    font-size: 13px;
-
-    white-space: pre-wrap;
-
-    word-break: break-word;
-
-  }
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypixel SkyBlock Stats</title>
+
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Note: Assuming style.css exists or is not critical if all styles are inline. 
+         Keeping the link as per original file. -->
+    <link rel="stylesheet" href="style.css"> 
+    
+    <style>
+        /* ==================================== */
+        /* Custom Styles for Search Bar Changes */
+        /* ==================================== */
+
+        /* Font declaration for the search bar elements ONLY */
+        @font-face {
+            font-family: 'MinecraftTen';
+            src: url('https://kmek347-lab.github.io/fonthost/Minecraft.otf') format('opentype');
+            font-display: swap;
+        }
+        
+        /* Moving the whole search function down */
+        .search-ui-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 70px; 
+            margin-bottom: 30px;
+            z-index: 10;
+        }
+
+        /* Custom Class for Green Button Styling */
+        .search-btn-custom {
+            /* Apply Minecraft font ONLY to the search button */
+            font-family: 'MinecraftTen', sans-serif !important; 
+        }
+
+        /* Base Button Color (Green) */
+        .search-btn-custom > p {
+            background-color: #4CAF50 !important; /* Base green */
+            border: 2px solid #244D11 !important; /* Darker green border */
+            color: #FFFFFF !important;
+            transition: all 0.1s ease-in-out;
+        }
+        /* Hover effect */
+        .search-btn-custom:hover > p {
+            background-color: #66BB6A !important; /* Lighter green on hover */
+        }
+        /* Active/Pressed effect (shrinks down) */
+        .search-btn-custom:active > p {
+            background-color: #4CAF50 !important;
+            padding-block: 1rem !important; 
+        }
+        /* Shadow effect - Darker green for shadow */
+        .search-btn-custom > div {
+            height: 0.5rem !important; 
+            background-color: #244D11 !important; 
+            transition: all 0.1s ease-in-out;
+        }
+        .search-btn-custom:active > div {
+            height: 0 !important;
+        }
+        
+        /* Apply Minecraft font to input field only */
+        #uuidInput {
+             font-family: 'MinecraftTen', sans-serif !important;
+        }
+        
+        /* ==================================== */
+        /* Custom Logo Styling */
+        /* ==================================== */
+        .header-title-container {
+            display: flex;
+            align-items: center; /* Vertically align image and text */
+            gap: 8px; /* Spacing between image and title */
+        }
+
+        .header-logo {
+            width: 85px; /* INCREASED SIZE */
+            height: 85px; /* INCREASED SIZE */
+            object-fit: contain;
+            /* Optional: ensure pixelated look for Minecraft style image */
+            image-rendering: pixelated; 
+        }
+        
+        /* NEW: Attribution Row Styling (Bottom-Right) */
+        .attribution-row {
+            display: flex;
+            justify-content: flex-end; /* Pushes content to the right */
+            align-items: center;
+            width: 100%;
+            margin-top: 5px; /* Reduced gap from items list */
+            font-size: 16px; /* Smaller font for attribution */
+            line-height: 1; /* Tighter line height */
+        }
+        .attribution-logo {
+            width: 85px; /* INCREASED SIZE to match header logo (85px) */
+            height: 85px; /* INCREASED SIZE to match header logo (85px) */
+            margin-right: 5px; /* Reduced margin for better spacing with the large image */
+            object-fit: contain;
+            image-rendering: pixelated;
+            vertical-align: middle;
+        }
+
+
+        /* ==================================== */
+        /* Original Styles from lmao.html */
+        /* ==================================== */
+        
+        :root {
+            --mc-gold: #FFAA00;
+            --mc-green: #55FF55;
+            --mc-red: #FF5555;
+            --mc-yellow: #FFFF55;
+            --mc-aqua: #55FFFF;
+            --mc-gray: #AAAAAA;
+            --mc-dark-gray: #555555;
+            --mc-purple: #AA00AA;
+            --shadow-color: #3f3f3f;
+            
+            /* UI Colors */
+            --bg-dark-green: #04140d;
+            --bg-medium-green: #072515;
+            --accent: #1dd672;
+            --input-bg: #404040;
+            --text-light: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            width: 100vw;
+            background: radial-gradient(circle at top left, var(--bg-dark-green), var(--bg-medium-green));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Minecraft', sans-serif; 
+            color: #FFFFFF;
+            -webkit-font-smoothing: none;
+            overflow-x: hidden;
+        }
+        
+        /* --- Stats Card Styling --- */
+        .stats-card {
+            position: relative;
+            width: 960px;
+            height: 540px;
+            overflow: hidden;
+            background-color: #000;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); 
+            flex-shrink: 0; 
+            /* ADDED: Curved Card Edges */
+            border-radius: 15px; 
+        }
+
+        .bg-layer {
+            position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            background-image: url('https://media.discordapp.net/attachments/1409971613067378840/1450113373588029574/banner_2.webp?ex=69415ad2&is=69400952&hm=b81266bf1197fb5d1d33752294f6c0598c1ff4f9588b1ab63bcabb526283408c&=&format=webp&width=838&height=471');
+            background-size: cover;
+            background-position: center;
+            filter: blur(4px); 
+            z-index: 1;
+            /* ADDED: Match Card Curve */
+            border-radius: 25px; 
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 2;
+            /* ADDED: Match Card Curve */
+            border-radius: 15px; 
+        }
+
+        .content {
+            position: relative;
+            z-index: 3;
+            padding: 25px 35px;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mc-shadow {
+            text-shadow: 2px 2px 0px var(--shadow-color);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin: 0 0 5px 0;
+            font-weight: normal;
+        }
+        
+        /* New style for the Profile Name part of the header */
+        .profile-tag {
+            font-weight: bold;
+            margin-left: 10px;
+            /* Gradient text support */
+            background-clip: text;
+            -webkit-background-clip: text;
+            /* Fallback color handled inline */
+        }
+        
+        /* Helper class for gradient text to make color transparent so background shows */
+        .gradient-text {
+            -webkit-text-fill-color: transparent;
+            text-fill-color: transparent;
+        }
+
+        .player-name {
+            font-size: 24px;
+            min-height: 30px; 
+            margin-bottom: 5px;
+        }
+
+        .skin-frame {
+            width: 84px;
+            height: 84px;
+            background-color: rgba(0,0,0,0.3);
+            border: 3px solid #FFF;
+            box-shadow: 2px 2px 0px var(--shadow-color);
+            overflow: hidden;
+        }
+
+        .skin-frame img {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated; 
+        }
+
+        /* Stats Layout */
+        .stat-group {
+            font-size: 20px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        
+        .stat-group.level-info {
+            display: flex;
+            gap: 40px;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            line-height: 1.5;
+            width: 100%;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+        }
+        
+        .stat-item {
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .footer-container {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            font-size: 20px;
+            padding-top: 35px; 
+            padding-bottom: 10px;
+        }
+        
+        /* Expandable Items List */
+        .items-list-container {
+            font-size: 20px;
+            line-height: 1.5;
+            display: block; 
+        }
+        
+        .items-row {
+            display: flex;
+            flex-wrap: wrap; 
+            align-items: baseline;
+            gap: 10px; 
+        }
+        
+        .items-label {
+            display: block; 
+            margin-bottom: 5px;
+            color: #FFFFFF; 
+        }
+
+        .items-list-content {
+            display: inline;
+            word-break: break-word; 
+            flex-shrink: 1;
+            min-width: 0;
+            pointer-events: none; 
+        }
+        
+        .expand-btn {
+            background: none;
+            border: none;
+            color: var(--mc-aqua);
+            font-family: 'Minecraft', sans-serif;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            margin: 0; 
+            text-decoration: underline;
+            text-shadow: 2px 2px 0px var(--shadow-color);
+            white-space: nowrap; 
+            flex-shrink: 0; 
+        }
+        
+        .expand-btn:focus {
+            outline: none;
+        }
+        
+        /* Colors */
+        .gold { color: var(--mc-gold); }
+        .green { color: var(--mc-green); }
+        .red { color: var(--mc-red); }
+        .yellow { color: var(--mc-yellow); }
+        .aqua { color: var(--mc-aqua); }
+        .gray { color: var(--mc-gray); }
+        .white { color: #FFFFFF; }
+        /* Ensuring a bright color for attribution */
+        .strawberry { color: #FF5555; }
+
+    </style>
 </head>
-
 <body>
 
-<div class="wrap">
-
-  <header>
-
-    <div class="avatar">
-
-      <img id="avatarImg" 
-
-           src="https://skin.laby.net/api/render/user/38a27d59-1c8d-4eb2-a27c-530612b07cfb.png?shadow=true&bust=true" 
-
-           alt="avatar" 
-
-           onerror="this.src='https://via.placeholder.com/64/1dd672/FFFFFF?text=?'">
-
+    <div class="search-ui-container">
+        <div class="flex flex-col items-center gap-1.5 w-[1100px] max-w-[95%]"> 
+            <div class="w-full">
+                <div class="border-shark-950 bg-shark-700 flex w-full overflow-hidden rounded-xl border-2">
+                    <input 
+                        type="text"
+                        id="uuidInput" 
+                        autocomplete="off" 
+                        placeholder="Search through millions of players..." 
+                        class="w-full rounded-l-xl border-2 border-r-0 border-white/5 bg-transparent p-4 text-white/90 -outline-offset-2 outline-white last:rounded-r-xl last:border-r-2 focus:outline-2" 
+                        value=""
+                    >
+                    <a 
+                        id="refreshBtn"
+                        href="#"
+                        class="search-btn-custom group relative flex h-full flex-shrink-0 flex-col overflow-hidden border-l-2 border-shark-950 text-center -outline-offset-2 outline-white focus:outline-2" 
+                    >
+                        <p class="px-4 py-3 text-white/90">Search</p>
+                        <div class="h-2"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="stats-card">
+        <div class="bg-layer"></div>
+        <div class="overlay"></div>
 
-    <div>
+        <div class="content mc-shadow">
+            
+            <div class="header">
+                <div>
+                    <div class="header-title-container">
+                        <img 
+                            src="https://media.discordapp.net/attachments/1409971613067378840/1450151348468449503/eefca339-b354-47f4-bf90-7bb2fe1cc6aa_removalai_preview.png?ex=69417e2f&is=69402caf&hm=a97e83be7dfd8ce423501424c947e468e7ef328aeedf539aee850e06a3edbd61&=&format=webp&quality=lossless&width=575&height=575"
+                            alt="Custom Hypixel Logo" 
+                            class="header-logo"
+                        >
+                        <h1 id="mainTitle">HYPIXEL STATS</h1>
+                    </div>
+                    <div class="player-name" id="oneLine">—</div>
+                </div>
+                <div class="skin-frame">
+                    <img id="avatarImg" 
+                         src="https://via.placeholder.com/64/1dd672/FFFFFF?text=?" 
+                         alt="Skin">
+                </div>
+            </div>
+            
+            <div id="statsContent">
+                <div class="loading-message yellow">Enter a username above to load SkyBlock stats...</div>
+            </div>
 
-      <h1 id="oneLine">—</h1>
-
-      <div class="subtitle">MeowAPI - Enabled</div>
-      <div class="subtitle profile-name" id="profileNameOutput"></div>
-
+        </div>
     </div>
-
-  </header>
-
-
-
-  <div class="card input-box">
-
-    <input type="text" id="uuidInput" placeholder="Enter Username">
-
-    <button class="show-btn" id="refreshBtn">Show Stats</button>
-
-  </div>
-
-
-
-  <div class="card">
-
-    <div id="output" class="muted">Enter username above...</div>
-
-  </div>
-
-</div>
-
-
 
 <script>
 
-// --- Helper Functions ---
+// --- Helper Functions and Logic (Unchanged) ---
 
-function minecraftColorToHtml(text) {
-
-  const colorMap = {
-
+const MC_COLORS = {
     '0': '#000000','1': '#0000AA','2': '#00AA00','3': '#00AAAA',
-
     '4': '#AA0000','5': '#AA00AA','6': '#FFAA00','7': '#AAAAAA',
-
     '8': '#555555','9': '#5555FF','a': '#55FF55','b': '#55FFFF',
-
     'c': '#FF5555','d': '#FF55FF','e': '#FFFF55','f': '#FFFFFF'
+};
 
-  };
+function parseRankInfo(prefix, rawName) {
+    let result = { 
+        rankText: "Default", 
+        colorCode: '7', // Gray
+        colorHex: MC_COLORS['7'] 
+    };
 
-  if (!text) return "";
+    if (!prefix) return result;
 
-  return text
+    let cleanPrefix = prefix.replace(/[\[\]]/g, "");
+    let plainRank = cleanPrefix.replace(/§[0-9a-fk-or]/g, "").trim();
+    
+    if (plainRank) {
+        result.rankText = plainRank;
+    }
 
-    .replace(/§([0-9a-f])/g, (_, c) => `<span style="color:${colorMap[c]||'#fff'}">`)
+    const firstColorMatch = prefix.match(/§([0-9a-f])/);
+    if (firstColorMatch) {
+        result.colorCode = firstColorMatch[1];
+        result.colorHex = MC_COLORS[result.colorCode];
+    } else {
+        if (plainRank.includes("MVP")) { result.colorCode = 'b'; result.colorHex = MC_COLORS['b']; } 
+        else if (plainRank.includes("VIP")) { result.colorCode = 'a'; result.colorHex = MC_COLORS['a']; } 
+    }
 
-    .replace(/§r/g, '</span>') + '</span>';
-
+    return result;
 }
 
+/**
+ * Returns the CSS color string (or gradient) for a given fruit profile name.
+ * Returns object with { style: string, isGradient: boolean }
+ */
+function getProfileColorStyle(profileName) {
+    const name = profileName.toLowerCase();
+    
+    // Fruit Color Map
+    const colors = {
+        'apple': '#FF5555',       // Red
+        'banana': '#FFFF55',      // Yellow
+        'coconut': '#965A3E',     // Brown
+        'cucumber': '#006400',    // Dark Green
+        'grapes': '#AA00AA',      // Purple
+        'kiwi': '#FFFFFF',        // White
+        'lemon': '#FFFACD',       // Light Yellow
+        'lime': '#55FF55',        // Lime
+        'orange': '#FFAA00',      // Orange
+        'pineapple': '#C0C000',   // Greyish Yellow (Olive)
+        'pomegranate': '#FF0000', // Red
+        'blueberry': '#5555FF',   // Blue
+        'raspberry': '#E30B5D',
+        'strawberry': '#FF0055',
+        'tomato': '#FF6347',
+        'watermelon': '#FF3333',
+        'zucchini': '#228B22'
+    };
 
+    // Gradients
+    const gradients = {
+        'mango': 'linear-gradient(to right, #FF5555, #FFFF55)',  // Red to Yellow
+        'papaya': 'linear-gradient(to right, #55FF55, #FFAA00)', // Greenish Orange
+        'peach': 'linear-gradient(to right, #FF7F50, #FFD700)',  // Reddish Yellow
+        'pear': 'linear-gradient(to right, #55FF55, #FF5555)',   // Greenish Red
+    };
 
-function addHyphens(uuid) {
-
-  return uuid.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, "$1-$2-$3-$4-$5");
-
+    if (gradients[name]) {
+        return { style: `background-image: ${gradients[name]};`, isGradient: true };
+    } else if (colors[name]) {
+        return { style: `color: ${colors[name]};`, isGradient: false };
+    }
+    
+    // Default fallback (e.g., Zucchini or unknown)
+    return { style: `color: #AAAAAA;`, isGradient: false };
 }
-
-
-
-function cleanName(name) {
-
-  if (!name) return "";
-  
-  // Regex to remove a wide range of Hypixel/Minecraft symbols
-  let cleaned = name.replace(/[✪✿✦⚚➎★☆◆◇■□●○◎☀☁☂☃☄☾☽♛♕♚♔♤♡♢♧♠♥♦♣⚜⚡✨❖⬥⬦⬧⬨⬩⭐🌟🟊❶-❿⓿-➓IVXLCᛚ⏣]+/g, "").trim();
-
-  // New specific cleanup for common, undesirable prefixes like 'apis'
-  cleaned = cleaned.replace(/apis/i, '').trim(); // Remove "apis" regardless of case
-  
-  return cleaned;
-
-}
-
-
 
 function formatCoins(num) {
-
-  if (!isFinite(num)) return "0";
+  if (!isFinite(num) || num === 0) return "0";
   const numAbs = Math.abs(num);
 
-  // Use standard SI prefixes for large numbers (Quadrillion, Trillion, Billion, Million, Thousand)
-  if (numAbs >= 1e15) return (num / 1e15).toFixed(1) + "Q"; // Quadrillion
-
-  if (numAbs >= 1e12) return (num / 1e12).toFixed(1) + "T"; // Trillion
-
-  if (numAbs >= 1e9) return (num / 1e9).toFixed(1) + "B"; // Billion
-
-  if (numAbs >= 1e6) return (num / 1e6).toFixed(1) + "M"; // Million
-
-  if (numAbs >= 1e3) return (num / 1e3).toFixed(0) + "K"; // Thousand (0 decimal for K)
-
-  return Math.floor(num).toString();
-
+  if (numAbs >= 1e15) return (num / 1e15).toFixed(1) + "Q";
+  if (numAbs >= 1e12) return (num / 1e12).toFixed(1) + "T";
+  if (numAbs >= 1e9) return (num / 1e9).toFixed(1) + "B";
+  if (numAbs >= 1e6) return (num / 1e6).toFixed(1) + "M";
+  if (numAbs >= 1e3) return (num / 1e3).toFixed(0) + "K";
+  return Math.floor(num).toLocaleString();
 }
 
+function addHyphens(uuid) {
+  return uuid.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, "$1-$2-$3-$4-$5");
+}
 
 function getSkillAverage(member) {
   const skills = member.skills || {};
   let totalLevel = 0;
   let skillCount = 0;
-  
-  // Skill names typically used for skill average calculation
   const skillNames = ["alchemy", "carpentry", "combat", "enchanting", "farming", "fishing", "foraging", "mining", "taming"];
   
   for (const name of skillNames) {
@@ -394,218 +517,289 @@ function getSkillAverage(member) {
       skillCount++;
     }
   }
-  
   return skillCount > 0 ? (totalLevel / skillCount) : 0;
 }
 
-
-// Base64 encoding function
-function encodeBase64Payload(username, profileName) {
-    const payload = [{"uuid":1,"profileId":2}, username, profileName];
-    const jsonString = JSON.stringify(payload);
-    let encoded = btoa(jsonString);
-
-    while (encoded.endsWith('=')) {
-        encoded = encoded.slice(0, -1);
-    }
+window.toggleItems = function(button) {
+    const container = button.closest('.items-list-container');
+    const fullList = container.querySelector('#fullList');
+    const shortList = container.querySelector('#shortList');
+    const totalCount = parseInt(button.dataset.count, 10);
     
-    return encoded;
+    if (fullList.style.display === 'none') {
+        fullList.style.display = 'inline';
+        if (shortList) shortList.style.display = 'none';
+        button.innerHTML = '-LESS';
+    } else {
+        fullList.style.display = 'none';
+        if (shortList) shortList.style.display = 'inline';
+        button.innerHTML = `+${totalCount} MORE`;
+    }
 }
 
-
-// --- Main Fetch Function ---
-async function fetchStats() {
-
-  const input = document.getElementById('uuidInput');
-  const avatarImg = document.getElementById('avatarImg');
-  const oneLine = document.getElementById('oneLine');
-  const out = document.getElementById('output');
-  const profileNameOutput = document.getElementById('profileNameOutput');
-  const username = input.value.trim();
-
-
-
-  if (!username) {
-
-    out.textContent = "⚠️ Enter a username.";
-    profileNameOutput.textContent = "";
-    return;
-
-  }
-
-
-
-  out.textContent = "Fetching data and finding best profile...";
-  oneLine.textContent = "Loading...";
-  profileNameOutput.textContent = "";
-
-
-
-  try {
-
-    // 1. Fetch Hypixel Player Data (to get UUID and minigame stats)
-    const playerRes = await fetch(`https://api.soopy.dev/player/${encodeURIComponent(username)}`);
-    const playerJson = await playerRes.json();
-    if (!playerJson.success || !playerJson.data) throw new Error("Invalid player data or API error.");
-
-
-
-    const uuidRaw = playerJson.data.uuid || "";
-    const uuid = uuidRaw.replace(/-/g, "");
-    const uuidHyphen = addHyphens(uuid);
-
-
-
-    const prefix = playerJson.data.prefix || "";
-    const name = playerJson.data.name || playerJson.data.username || username;
-    const nameWithPrefix = playerJson.data.stats?.nameWithPrefix || playerJson.data.nameWithPrefix || (prefix ? `${prefix} ${name}` : name);
-    const formattedName = minecraftColorToHtml(nameWithPrefix);
-
-
-
-    // Set skin preview
-    avatarImg.src = `https://skin.laby.net/api/render/user/${uuidHyphen}.png?shadow=true&bust=true`;
-
-
-
-    // Minigame Stats (from player data)
-    const ach = playerJson.data.achievements || {};
-    const skywarsStars = ach.skywars_you_re_a_star || 0;
-    const arcadeCoins = ach.arcade_arcade_banker || 0;
-    const bedwarsStars = ach.bedwars_level || 0;
-    const uhcBounty = ach.uhc_bounty || 0;
-    const pitGold = ach.pit_gold || 0;
-
-
-
-    // 2. Fetch SkyBlock Data (all profiles, with networth)
-    const skyRes = await fetch(`https://soopy.dev/api/v2/player_skyblock/${uuid}?networth=true`);
-    const skyJson = await skyRes.json();
+function createStatElement(label, value, colorClassOrHex, isHex = false) {
+    const formattedValue = isNaN(value) ? value : (typeof value === 'number' ? value.toLocaleString() : value);
     
-    // --- BEST PROFILE SELECTION LOGIC ---
-    let bestMember = null;
-    let bestCuteName = "N/A";
-    let maxScore = -1;
-    let profilesData = skyJson.data?.profiles || {};
-
-    for (const profileId in profilesData) {
-        const profile = profilesData[profileId];
-        const member = profile.members?.[uuid];
-        
-        if (member) {
-            // Get key stats for scoring
-            const networth = member.nwDetailed?.networth || 0;
-            const skillAvg = getSkillAverage(member);
-            const sbLvl = member.skyblock_level || 0;
-
-            // Simple Scoring Formula (Networth is the primary factor)
-            const score = (networth / 1000000) * 100 + (skillAvg * 100) + (sbLvl * 10);
-            
-            if (score > maxScore) {
-                maxScore = score;
-                bestMember = member;
-                bestCuteName = profile.stats?.cute_name || profile.stats?.profile_name || "Unknown Profile";
-            }
-        }
-    }
-    // --- END PROFILE SELECTION LOGIC ---
-
-    // 3. Use the Best Profile Data for Output
-    let coins = 0, kills = 0, fairy = 0, types = {}, networth = 0, sbLvl = 0;
-    let avgSkillLevel = 0;
-    
-    if (bestMember) {
-        coins = bestMember.coin_purse || 0;
-        kills = bestMember.kills?.total || 0;
-        fairy = bestMember.fairy_souls_collected || 0;
-        sbLvl = bestMember.skyblock_level || 0;
-        types = bestMember.nwDetailed?.types || {};
-        networth = bestMember.nwDetailed?.networth || 0;
-        avgSkillLevel = getSkillAverage(bestMember).toFixed(2);
-        
-        if (networth === 0 && coins > 0) {
-            networth = coins;
-        }
+    let valueSpan = '';
+    if (isHex) {
+        valueSpan = `<span style="color: ${colorClassOrHex}">${formattedValue}</span>`;
+    } else {
+        valueSpan = `<span class="${colorClassOrHex}">${formattedValue}</span>`;
     }
 
+    return `<div class="stat-item">${label}: ${valueSpan}</div>`;
+}
 
+function cleanName(name) {
+  if (!name) return "";
+  let cleaned = name.replace(/[✪✿✦⚚➎★☆◆◇■□●○◎☀☁☂☃☄☾☽♛♕♚♔♤♡♢♧♠♥♦♣⚜⚡✨❖⬥⬦⬧⬨⬩⭐🌟🟊❶-❿⓿-➓IVXLCᛚ⏣]+/g, "").trim();
+  cleaned = cleaned.replace(/apis/i, '').trim(); 
+  return cleaned;
+}
+
+function collectValuableItems(types) {
     const collectItems = (t) => (t?.items?.length ? t.items.map(i => cleanName(i.name)) : []);
     const sections = [
       ...collectItems(types.armor),
       ...collectItems(types.equipment),
       ...collectItems(types.wardrobe),
       ...collectItems(types.weapons),
-      ...collectItems(types.inventory)
+      ...collectItems(types.inventory),
+      ...collectItems(types.talismans),
+      ...collectItems(types.pets),
+      ...collectItems(types.sacks)
     ];
-    // Filter out any entries that ended up empty after cleaning (e.g., if an item name was ONLY 'apis')
-    const allValidItems = sections.filter(item => item);
-    
-    // ITEM TRUNCATION LOGIC
-    let itemListStr = "";
-    const MAX_SHOWN_ITEMS = 5; // Change this number to show more or fewer items before cutting off
-
-    if (allValidItems.length > MAX_SHOWN_ITEMS) {
-        const shownItems = allValidItems.slice(0, MAX_SHOWN_ITEMS).join(", ");
-        const remaining = allValidItems.length - MAX_SHOWN_ITEMS;
-        itemListStr = `${shownItems}, +${remaining} more`;
-    } else {
-        itemListStr = allValidItems.join(", ");
-    }
-
-
-    // 4. Generate Final Output String
-    const parts = [];
-    
-    if (networth > 0) parts.push(`NW: ${formatCoins(networth)}`);
-    if (coins > 0) parts.push(`Purse: ${formatCoins(coins)}`);
-    if (avgSkillLevel > 0) parts.push(`Avg_Skill: ${avgSkillLevel}`);
-    if (skywarsStars > 0) parts.push(`SW: ${skywarsStars}`);
-    if (bedwarsStars > 0) parts.push(`BW: ${bedwarsStars}`);
-    if (pitGold > 0) parts.push(`Pit_Gold: ${formatCoins(pitGold)}`);
-    if (uhcBounty > 0) parts.push(`UHC_Bounty: ${formatCoins(uhcBounty)}`);
-    if (sbLvl > 0) parts.push(`Sb_Lvl: ${sbLvl}`);
-    if (arcadeCoins > 0) parts.push(`Arcade_Coins: ${formatCoins(arcadeCoins)}`);
-    
-    // Add additional stats
-    if (kills > 0) parts.push(`Sb_Kills: ${kills}`);
-    if (fairy > 0) parts.push(`Sb_Fairy_Souls: ${fairy}`);
-    if (itemListStr) parts.push(`Sb_Valuable_Items: ${itemListStr}`);
-    
-
-    oneLine.innerHTML = formattedName || name;
-    profileNameOutput.textContent = `(Best Profile: ${bestCuteName})`;
-    
-    // Final output is JUST the stats string
-    out.textContent = parts.join(" ") 
-        || "No significant stats found for this player/profile.";
-
-  } catch (err) {
-
-    console.error(err);
-
-    out.textContent = "❌ Failed to fetch stats. Check console for details or ensure the username is correct.";
-
-    oneLine.textContent = "—";
-    profileNameOutput.textContent = "";
-
-  }
-
+    return [...new Set(sections)].filter(name => name.length > 0);
 }
 
+function createItemElements(itemsArray) {
+    const label = "SKYBLOCK VALUABLE ITEMS";
+    if (!itemsArray || itemsArray.length === 0) {
+        return `<div class="items-list-container stat-group items-label">${createStatElement(label, "None", "gray")}</div>`;
+    }
 
+    const maxShortDisplay = 3;
+    const totalCount = itemsArray.length - maxShortDisplay;
+    let contentHtml;
+    
+    if (itemsArray.length > maxShortDisplay) {
+        const shortListContent = itemsArray.slice(0, maxShortDisplay).join(", ");
+        const fullListContent = itemsArray.join(", ");
+        
+        contentHtml = `
+            <div class="items-label white">${label}:</div>
+            <div class="items-row">
+                <span class="yellow items-list-content" id="shortList">${shortListContent}</span>
+                
+                <button class="expand-btn" data-count="${totalCount}" onclick="toggleItems(this)">+${totalCount} MORE</button>
+
+                <span class="yellow items-list-content" id="fullList" style="display:none;">${fullListContent}</span>
+            </div>
+        `;
+    } else {
+        contentHtml = `
+            <div class="items-label white">${label}:</div>
+            <div class="items-row"><span class="yellow items-list-content">${itemsArray.join(", ")}</span></div>
+        `;
+    }
+    return `<div class="items-list-container stat-group">${contentHtml}</div>`;
+}
+
+function renderStats(stats) {
+    const { 
+        networth, coins, kills, skywarsStars, bedwarsStars, pitGold, uhcBounty, arcadeCoins, fairy, itemsArray,
+        rankText, rankColorHex
+    } = stats;
+    
+    const rankElement = createStatElement("RANK", rankText, rankColorHex, true);
+    
+    // Logo URL for the attribution text
+    const attributionLogoUrl = "https://media.discordapp.net/attachments/1409971613067378840/1450151348468449503/eefca339-b354-47f4-bf90-7bb2fe1cc6aa_removalai_preview.png?ex=69417e2f&is=69402caf&hm=a97e83be7dfd8ce423501424c947e468e7ef328aeedf539aee850e06a3edbd61&=&format=webp&quality=lossless&width=575&height=575";
+
+
+    const html = `
+        <div class="stat-group level-info">
+            <div class="col">
+                ${createStatElement("SKYBLOCK NW", networth, "gold")}
+                ${createStatElement("PURSE", coins, "aqua")}
+            </div>
+            <div class="col">
+                ${createStatElement("FAIRY SOULS", fairy, "aqua")} 
+                ${rankElement}
+            </div>
+            <div class="col"></div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="col">
+                ${createStatElement("SKYWARS STARS", skywarsStars, "green")}
+                ${createStatElement("SKYBLOCK KILLS", kills, "red")} 
+            </div>
+            <div class="col">
+                ${createStatElement("BEDWARS STARS", bedwarsStars, "green")}
+                ${createStatElement("PIT GOLD", pitGold, "yellow")}
+            </div>
+            <div class="col">
+                ${createStatElement("UHC BOUNTY", uhcBounty, "red")}
+                ${createStatElement("ARCADE COINS", arcadeCoins, "yellow")}
+            </div>
+        </div>
+        
+        <div class="footer-container">
+            ${createItemElements(itemsArray)}
+            
+            <div class="attribution-row">
+                <img 
+                    src="${attributionLogoUrl}" 
+                    alt="Ghast API Logo" 
+                    class="attribution-logo"
+                >
+                <span class="red">stats by ghastapi</span>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('statsContent').innerHTML = html;
+}
+
+async function fetchStats() {
+  const input = document.getElementById('uuidInput');
+  const avatarImg = document.getElementById('avatarImg');
+  const oneLine = document.getElementById('oneLine');
+  const mainTitle = document.getElementById('mainTitle');
+  const statsContent = document.getElementById('statsContent');
+  const username = input.value.trim();
+
+  // Reset Title
+  mainTitle.innerHTML = "HYPIXEL STATS";
+
+  if (!username) {
+    statsContent.innerHTML = `<div class="loading-message red">⚠️ Enter a username.</div>`;
+    oneLine.innerHTML = "—";
+    return;
+  }
+
+  statsContent.innerHTML = `<div class="loading-message yellow">Fetching data...</div>`;
+  oneLine.innerHTML = "Loading...";
+  avatarImg.src = `https://via.placeholder.com/64/1dd672/FFFFFF?text=?`;
+
+  try {
+    // 1. Fetch Hypixel Player Data
+    const playerRes = await fetch(`https://api.soopy.dev/player/${encodeURIComponent(username)}`);
+    const playerJson = await playerRes.json();
+    if (!playerJson.success || !playerJson.data) throw new Error("Invalid player data or API error.");
+
+    const uuidRaw = playerJson.data.uuid || "";
+    const uuid = uuidRaw.replace(/-/g, "");
+    const uuidHyphen = addHyphens(uuid);
+
+    // --- Rank and Name Parsing ---
+    const rawName = playerJson.data.username || username;
+    const prefix = playerJson.data.prefix || "";
+    
+    const rankInfo = parseRankInfo(prefix, rawName);
+    const { rankText, colorHex } = rankInfo;
+    
+    oneLine.innerHTML = `<span style="color: ${colorHex}">${rawName}</span>`;
+
+    const ach = playerJson.data.achievements || {};
+    // NEW: Access raw stats for potentially more reliable Pit data
+    const stats = playerJson.data.stats || {};
+    const pitStats = stats.Pit || {};
+
+    const skywarsStars = ach.skywars_you_re_a_star || 0;
+    const arcadeCoins = ach.arcade_arcade_banker || 0;
+    const bedwarsStars = ach.bedwars_level || 0;
+    
+    // UPDATED UHC BOUNTY LOGIC
+    // Previous logic (removed): const uhcBounty = pitStats.bounty_gold_claimed || ach.pit_bounty || 0; 
+    // New logic from index1.html:
+    const uhcBounty = ach.uhc_bounty || 0;
+
+    const pitGold = ach.pit_gold || 0;
+
+    // 2. Fetch SkyBlock Data
+    const skyRes = await fetch(`https://soopy.dev/api/v2/player_skyblock/${uuid}?networth=true`);
+    const skyJson = await skyRes.json();
+    
+    // Best Profile Logic
+    let bestMember = null;
+    let bestCuteName = "";
+    let maxScore = -1;
+    let profilesData = skyJson.data?.profiles || {};
+
+    for (const profileId in profilesData) {
+        const profile = profilesData[profileId];
+        const member = profile.members?.[uuid];
+        if (member) {
+            const networth = member.nwDetailed?.networth || 0;
+            const skillAvg = getSkillAverage(member);
+            const sbLvl = member.skyblock_level || 0;
+            const score = (networth / 1000000) * 100 + (skillAvg * 100) + (sbLvl * 10);
+            
+            if (score > maxScore) {
+                maxScore = score;
+                bestMember = member;
+                bestCuteName = profile.stats?.cute_name || profile.stats?.profile_name || "Unknown";
+            }
+        }
+    }
+
+    // --- Update Title with Profile Name ---
+    if (bestCuteName) {
+        const colorData = getProfileColorStyle(bestCuteName);
+        const gradientClass = colorData.isGradient ? 'gradient-text' : '';
+        // Note: We prepend the profile tag to the text content of the H1 element.
+        mainTitle.innerHTML = `HYPIXEL STATS - <span class="profile-tag ${gradientClass}" style="${colorData.style}">${bestCuteName}</span>`;
+    }
+
+    // 3. Extract Best Profile Data
+    let coins = 0, kills = 0, fairy = 0, networth = 0;
+    let itemsArray = [];
+    
+    if (bestMember) {
+        coins = bestMember.coin_purse || 0;
+        kills = bestMember.kills?.total || 0;
+        fairy = bestMember.fairy_souls_collected || 0;
+        networth = bestMember.nwDetailed?.networth || 0;
+        if (bestMember.nwDetailed?.types) {
+             itemsArray = collectValuableItems(bestMember.nwDetailed.types);
+        }
+        if (networth === 0 && coins > 0) networth = coins;
+    }
+
+    avatarImg.src = `https://vzge.me/face/512/${uuidHyphen}.png`;
+    avatarImg.onerror = () => { avatarImg.src = 'https://vzge.me/face/512/38a27d59-1c8d-4eb2-a27c-530612b07cfb.png'; };
+
+    const finalStats = {
+        networth: formatCoins(networth),
+        coins: formatCoins(coins),
+        kills: (kills > 0 ? kills.toLocaleString() : "0"),
+        fairy: (fairy > 0 ? fairy.toLocaleString() : "0"), 
+        itemsArray: itemsArray,
+        skywarsStars: (skywarsStars > 0 ? skywarsStars.toLocaleString() : "0"),
+        bedwarsStars: (bedwarsStars > 0 ? bedwarsStars.toLocaleString() : "0"),
+        pitGold: formatCoins(pitGold),
+        uhcBounty: formatCoins(uhcBounty),
+        arcadeCoins: formatCoins(arcadeCoins),
+        rankText: rankText,
+        rankColorHex: colorHex
+    };
+    
+    renderStats(finalStats);
+
+  } catch (err) {
+    console.error("Fetch Error:", err);
+    statsContent.innerHTML = `<div class="loading-message red">❌ Failed to load stats. Check console for details.</div>`;
+    oneLine.innerHTML = "—";
+  }
+}
 
 document.getElementById('refreshBtn').addEventListener('click', fetchStats);
-
 document.getElementById('uuidInput').addEventListener('keypress', e => {
-
   if (e.key === 'Enter') fetchStats();
-
 });
-
 </script>
 
 </body>
-
 </html>
-
-

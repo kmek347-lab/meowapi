@@ -1,597 +1,1122 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="utf-8" />
-
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-
-<title>MeowAPI - Enabled (Dynamic Profile)</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StatsCard — Donut SMP &amp; Hypixel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
 <style>
-
-  :root {
-
-    --bg1: #04140d;
-
-    --bg2: #072515;
-
-    --accent: #1dd672;
-
-    --text: #e6ffee;
-
-    --muted: #a8d8bb;
-
-    --glass: rgba(255,255,255,0.06);
-
-    --border: rgba(255,255,255,0.08);
-
-  }
-
-
-
-  html, body {
-
-    height: 100%;
-
-    margin: 0;
-
-    font-family: Inter, system-ui, sans-serif;
-
-    background: radial-gradient(circle at top left, var(--bg1), var(--bg2));
-
-    color: var(--text);
-
-  }
-
-
-
-  .wrap {
-
-    max-width: 900px;
-
-    margin: 40px auto;
-
-    padding: 20px;
-
-  }
-
-
-
-  header {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 16px;
-
-    margin-bottom: 20px;
-
-  }
-
-
-
-  .avatar {
-
-    width: 70px;
-
-    height: 70px;
-
-    border-radius: 14px;
-
-    overflow: hidden;
-
-    background: linear-gradient(135deg, #1b5d3e, #0f261a);
-
-    box-shadow: 0 0 18px rgba(0,0,0,0.5);
-
-  }
-
-
-
-  .avatar img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-  }
-
-
-
-  h1 {
-
-    font-size: 20px;
-
-    margin: 0;
-
-    font-weight: 700;
-
-  }
-
-
-
-  .subtitle {
-
-    color: var(--muted);
-
-    font-size: 13px;
-
-    margin-top: 6px;
-
-  }
-
-  
-
-  .subtitle.profile-name {
-    color: var(--accent);
-    font-weight: 600;
-  }
-
-
-  .card {
-
-    background: var(--glass);
-
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
-
-    padding: 20px;
-
-    margin-bottom: 16px;
-
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-
-    backdrop-filter: blur(25px);
-
-    -webkit-backdrop-filter: blur(25px);
-
-  }
-
-
-
-  .input-box {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-
-    align-items: flex-start;
-
-  }
-
-
-
-  #uuidInput {
-
-    padding: 10px 14px;
-
-    border-radius: 10px;
-
-    border: 1px solid rgba(255,255,255,0.15);
-
-    background: rgba(255,255,255,0.08);
-
-    color: #fff;
-
-    width: 280px;
-
-    outline: none;
-
-    font-size: 14px;
-
-  }
-
-
-
-  #uuidInput::placeholder {
-
-    color: rgba(255,255,255,0.3);
-
-  }
-
-
-
-  .show-btn {
-
-    background: linear-gradient(135deg, #1dd672 0%, #0fa36b 100%);
-
-    border: none;
-
-    padding: 14px 24px;
-
-    border-radius: 12px;
-
-    color: #0a1b13;
-
-    font-weight: 700;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    align-self: center;
-
-    box-shadow: 0 0 10px rgba(29,214,114,0.3), inset 0 1px 0 rgba(255,255,255,0.25);
-
-    transition: all 0.25s ease;
-
-  }
-
-
-
-  .show-btn:hover {
-
-    transform: translateY(-2px) scale(1.05);
-
-    box-shadow: 0 0 20px rgba(29,214,114,0.45);
-
-  }
-
-
-
-  .muted {
-
-    color: var(--muted);
-
-    font-size: 13px;
-
-    white-space: pre-wrap;
-
-    word-break: break-word;
-
-  }
-
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --y:   #FFD600;
+  --y2:  #FFA800;
+  --cy:  #3FFEFE;
+  --or:  #FF6B35;
+  --bg:  #060606;
+  --bg2: #0C0C0C;
+  --g1:  rgba(255,255,255,0.04);
+  --g2:  rgba(255,255,255,0.07);
+  --b1:  rgba(255,214,0,0.18);
+  --b2:  rgba(255,214,0,0.07);
+  --t1:  #E8E8E8;
+  --t2:  #888;
+  --t3:  #444;
+  --r:   0px;
+}
+
+/* ── RESET ──────────────────────────────────────────────── */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg);
+  color:var(--t1);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:16px;
+  line-height:1.4;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── AMBIENT BG ─────────────────────────────────────────── */
+.ambient {
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 10%, rgba(255,214,0,.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 85% 90%, rgba(63,254,254,.04) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,107,53,.02) 0%, transparent 70%);
+}
+.grain {
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+.wrap { max-width:1140px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+/* ── HEADER ─────────────────────────────────────────────── */
+header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:28px 0 20px;
+  border-bottom:1px solid rgba(255,214,0,.1);
+}
+.logo { display:flex; align-items:center; gap:14px; }
+.logo-mark {
+  width:34px; height:34px; position:relative; flex-shrink:0;
+  border:2px solid var(--y);
+  display:flex; align-items:center; justify-content:center;
+}
+.logo-mark::before {
+  content:''; width:14px; height:14px;
+  background:var(--y); transform:rotate(45deg);
+}
+.logo-text {
+  font-family:'Bebas Neue',cursive;
+  font-size:26px; letter-spacing:3px; color:var(--y);
+}
+.server-pills { display:flex; gap:8px; align-items:center; }
+.server-pill {
+  display:flex; align-items:center; gap:6px;
+  padding:5px 10px;
+  border:1px solid rgba(255,255,255,.1);
+  background:var(--g1);
+  font-size:11px; letter-spacing:2px; color:var(--t2);
+}
+.server-pill img { width:18px; height:18px; object-fit:contain; }
+
+/* ── TICKER ─────────────────────────────────────────────── */
+.ticker {
+  overflow:hidden; white-space:nowrap;
+  border-top:1px solid rgba(255,214,0,.08);
+  border-bottom:1px solid rgba(255,214,0,.08);
+  padding:7px 0; margin:0;
+}
+.ticker-inner {
+  display:inline-block;
+  animation:tick 28s linear infinite;
+  font-family:'Space Mono',monospace;
+  font-size:9px; letter-spacing:4px; color:rgba(255,214,0,.25);
+}
+@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ── HERO ───────────────────────────────────────────────── */
+.hero {
+  padding:64px 0 48px; text-align:center;
+}
+.hero-title {
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(52px,11vw,110px);
+  line-height:.9; letter-spacing:1px;
+  margin-bottom:12px;
+}
+.hero-title .yl { color:var(--y); }
+.hero-sub {
+  font-size:12px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--t2); margin-bottom:44px;
+}
+
+/* ── SEARCH ─────────────────────────────────────────────── */
+.search-wrap { max-width:580px; margin:0 auto; }
+.search-box {
+  display:flex;
+  border:1px solid rgba(255,214,0,.35);
+  background:rgba(255,214,0,.03);
+  backdrop-filter:blur(12px);
+  transition:border-color .25s, box-shadow .25s;
+}
+.search-box:focus-within {
+  border-color:var(--y);
+  box-shadow:0 0 40px rgba(255,214,0,.18), inset 0 0 20px rgba(255,214,0,.04);
+}
+.search-input {
+  flex:1; border:none; outline:none; background:transparent;
+  padding:17px 20px;
+  font-family:'Space Mono',monospace; font-size:14px;
+  color:var(--t1); letter-spacing:1px;
+}
+.search-input::placeholder { color:rgba(255,255,255,.25); }
+.search-btn {
+  border:none; background:var(--y);
+  padding:17px 32px;
+  font-family:'Bebas Neue',cursive; font-size:20px; letter-spacing:2px;
+  color:#000; cursor:pointer;
+  transition:background .2s, transform .1s;
+  white-space:nowrap;
+}
+.search-btn:hover { background:#fff; }
+.search-btn:active { transform:scale(.97); }
+.hint { font-size:11px; color:var(--t3); letter-spacing:2px; margin-top:10px; text-align:center; }
+
+/* ── SHIMMER ─────────────────────────────────────────────── */
+.shimmer-wrap {
+  text-align:center; padding:44px 0 4px;
+  display:none;
+}
+.shimmer-wrap.on { display:block; animation:fadeUp .4s ease; }
+.shimmer {
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(22px,4.5vw,42px);
+  letter-spacing:7px; text-transform:uppercase;
+  background:linear-gradient(90deg,rgba(255,214,0,.2) 0%,rgba(255,214,0,1) 25%,rgba(255,255,255,1) 50%,rgba(255,214,0,1) 75%,rgba(255,214,0,.2) 100%);
+  background-size:300% auto;
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shim 2.4s linear infinite;
+}
+@keyframes shim { to{background-position:-300% center} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LOADER ─────────────────────────────────────────────── */
+.loader-wrap {
+  display:none; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:18px; padding:72px 0;
+}
+.loader-wrap.on { display:flex; }
+.spin {
+  width:44px; height:44px;
+  border:2px solid rgba(255,214,0,.15);
+  border-top-color:var(--y);
+  border-radius:50%;
+  animation:rot .75s linear infinite;
+}
+@keyframes rot { to{transform:rotate(360deg)} }
+.loader-txt {
+  font-family:'Space Mono',monospace; font-size:10px;
+  letter-spacing:4px; color:rgba(255,255,255,.3);
+}
+
+/* ── RESULTS ─────────────────────────────────────────────── */
+.results { display:none; }
+.results.on { display:block; animation:fadeUp .5s ease; }
+
+/* ── ACTION BAR ─────────────────────────────────────────── */
+.action-bar {
+  display:flex; justify-content:flex-end; gap:10px;
+  margin-bottom:16px;
+}
+.action-btn {
+  display:flex; align-items:center; gap:7px;
+  padding:9px 18px;
+  border:1px solid rgba(255,214,0,.35);
+  background:transparent;
+  font-family:'Bebas Neue',cursive; font-size:16px; letter-spacing:2px;
+  color:var(--y); cursor:pointer;
+  transition:background .2s, box-shadow .2s;
+}
+.action-btn:hover { background:rgba(255,214,0,.08); box-shadow:0 0 20px rgba(255,214,0,.1); }
+.action-btn svg { width:16px; height:16px; fill:var(--y); }
+.share-btn { color:var(--cy); border-color:rgba(63,254,254,.35); }
+.share-btn svg { fill:var(--cy); }
+.share-btn:hover { background:rgba(63,254,254,.06); }
+
+/* ── PLAYER CARD ─────────────────────────────────────────── */
+.card {
+  position:relative; overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,.02) 100%);
+  border:1px solid rgba(255,214,0,.18);
+  backdrop-filter:blur(24px);
+  margin-bottom:40px;
+}
+.card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--y),rgba(255,214,0,.4),transparent);
+}
+.card-inner { padding:32px; }
+
+/* corner marks */
+.card::after {
+  content:'';
+  position:absolute; top:0; right:0;
+  width:40px; height:40px;
+  border-top:2px solid var(--y);
+  border-right:2px solid var(--y);
+  pointer-events:none;
+}
+.card-bl {
+  position:absolute; bottom:0; left:0;
+  width:40px; height:40px;
+  border-bottom:2px solid rgba(255,214,0,.25);
+  border-left:2px solid rgba(255,214,0,.25);
+  pointer-events:none;
+}
+
+/* ── PLAYER HEADER ───────────────────────────────────────── */
+.player-head {
+  display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+  margin-bottom:32px; padding-bottom:28px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.skin-wrap { position:relative; flex-shrink:0; }
+.skin {
+  display:block; width:80px; height:80px;
+  object-fit:cover; image-rendering:pixelated;
+  border:2px solid var(--y);
+}
+.skin-glow {
+  position:absolute; inset:-5px;
+  border:1px solid rgba(255,214,0,.25);
+  pointer-events:none;
+}
+.skin-glow::before {
+  content:'';
+  position:absolute; inset:0;
+  box-shadow:0 0 24px rgba(255,214,0,.2) inset;
+}
+.player-meta h2 {
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(30px,5vw,48px); letter-spacing:2px; line-height:1;
+}
+.rank-badge {
+  display:inline-flex; align-items:center;
+  padding:3px 10px; margin-top:7px;
+  border:1px solid currentColor;
+  font-family:'Space Mono',monospace; font-size:11px; font-weight:700;
+}
+.player-pills { margin-left:auto; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.mpill {
+  display:flex; align-items:center; gap:5px;
+  padding:5px 12px;
+  border:1px solid rgba(255,255,255,.1);
+  font-size:10px; letter-spacing:2px; color:var(--t2);
+}
+.mpill .dot { width:6px; height:6px; border-radius:50%; background:var(--y); }
+
+/* ── TABS ────────────────────────────────────────────────── */
+.tabs-nav {
+  display:flex; border-bottom:1px solid rgba(255,255,255,.08);
+  overflow-x:auto; scrollbar-width:none;
+}
+.tabs-nav::-webkit-scrollbar { display:none; }
+.tab-btn {
+  display:flex; align-items:center; gap:8px;
+  padding:13px 24px;
+  border:none; border-bottom:2px solid transparent;
+  background:transparent;
+  font-family:'Barlow Condensed',sans-serif; font-size:13px;
+  font-weight:700; letter-spacing:3px; text-transform:uppercase;
+  color:var(--t2); cursor:pointer;
+  transition:color .25s, border-color .25s;
+  white-space:nowrap; margin-bottom:-1px;
+}
+.tab-btn img { width:20px; height:20px; object-fit:contain; }
+.tab-btn.on { color:var(--y); border-bottom-color:var(--y); }
+.tab-btn.on.cy { color:var(--cy); border-bottom-color:var(--cy); }
+.tab-panel { display:none; padding-top:28px; }
+.tab-panel.on { display:block; }
+
+/* ── SECTION TITLE ───────────────────────────────────────── */
+.stitle {
+  display:flex; align-items:center; gap:14px;
+  font-family:'Bebas Neue',cursive; font-size:18px; letter-spacing:3px;
+  color:var(--y); margin-bottom:16px;
+}
+.stitle::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,rgba(255,214,0,.25),transparent);
+}
+.stitle.cy { color:var(--cy); }
+.stitle.cy::after { background:linear-gradient(90deg,rgba(63,254,254,.2),transparent); }
+
+/* ── STATS GRID ──────────────────────────────────────────── */
+.sg {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
+  gap:10px; margin-bottom:24px;
+}
+.sc {
+  padding:16px;
+  background:var(--g1); border:1px solid rgba(255,255,255,.07);
+  position:relative; overflow:hidden;
+  transition:border-color .25s, transform .2s;
+}
+.sc:hover { border-color:rgba(255,214,0,.25); transform:translateY(-2px); }
+.sc::before {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,214,0,.1),transparent);
+}
+.sc-label {
+  font-size:9px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--t2); margin-bottom:8px;
+}
+.sc-value {
+  font-family:'Space Mono',monospace; font-size:22px; font-weight:700;
+  color:var(--y); line-height:1;
+}
+.sc-value.cy { color:var(--cy); }
+.sc-value.or { color:var(--or); }
+.sc-sub { font-size:10px; color:var(--t2); margin-top:4px; letter-spacing:1px; }
+
+/* ── SKILL BARS ──────────────────────────────────────────── */
+.skills-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:12px; margin-bottom:24px;
+}
+.skill-row { display:flex; flex-direction:column; gap:5px; }
+.skill-hd { display:flex; justify-content:space-between; align-items:center; }
+.skill-name { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--t2); }
+.skill-lv { font-family:'Space Mono',monospace; font-size:13px; color:var(--cy); font-weight:700; }
+.bar { height:3px; background:rgba(255,255,255,.07); overflow:hidden; }
+.bar-fill {
+  height:100%; width:0;
+  background:linear-gradient(90deg,var(--cy),rgba(63,254,254,.4));
+  transition:width 1.1s cubic-bezier(.23,1,.32,1);
+}
+
+/* ── PROFILE SELECTOR ────────────────────────────────────── */
+.profile-sel { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:22px; }
+.profile-btn {
+  padding:6px 16px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,.12);
+  font-family:'Space Mono',monospace; font-size:10px; letter-spacing:1px;
+  color:var(--t2); cursor:pointer;
+  transition:all .2s; position:relative;
+}
+.profile-btn:hover { border-color:rgba(255,214,0,.3); color:var(--t1); }
+.profile-btn.on { background:rgba(63,254,254,.08); border-color:var(--cy); color:var(--cy); }
+.best-tag {
+  display:inline-block; margin-left:7px;
+  background:var(--y); color:#000;
+  font-family:'Space Mono',monospace; font-size:8px; font-weight:700; letter-spacing:1px;
+  padding:1px 5px; vertical-align:middle;
+}
+
+/* ── ITEMS GRID ──────────────────────────────────────────── */
+.items-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:8px; margin-bottom:24px;
+}
+.item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px;
+  background:var(--g1); border:1px solid rgba(255,255,255,.07);
+  transition:border-color .2s;
+}
+.item:hover { border-color:rgba(255,214,0,.2); }
+.item-icon { font-size:20px; flex-shrink:0; }
+.item-name { font-size:12px; color:var(--t1); line-height:1.3; }
+.item-rar { font-size:9px; letter-spacing:1px; text-transform:uppercase; }
+
+/* ── PETS GRID ───────────────────────────────────────────── */
+.pets-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:10px; margin-bottom:24px;
+}
+.pet {
+  text-align:center; padding:16px 10px;
+  background:var(--g1); border:1px solid rgba(255,255,255,.07);
+  transition:all .25s;
+}
+.pet:hover { transform:translateY(-3px); border-color:rgba(255,214,0,.25); }
+.pet-icon { font-size:30px; margin-bottom:8px; }
+.pet-name { font-family:'Bebas Neue',cursive; font-size:15px; letter-spacing:1px; color:var(--t1); }
+.pet-lv { font-family:'Space Mono',monospace; font-size:11px; color:var(--y); }
+
+/* ── ACCESSORIES ─────────────────────────────────────────── */
+.acc-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:8px; margin-bottom:24px;
+}
+
+/* ── RARITY COLORS ───────────────────────────────────────── */
+.c-common { color:#aaa; }
+.c-uncommon { color:#55FF55; }
+.c-rare { color:#5599FF; }
+.c-epic { color:#BB44BB; }
+.c-legendary { color:#FFAA00; }
+.c-mythic { color:#FF55FF; }
+.c-divine { color:#55FFFF; }
+.c-special { color:#FF5555; }
+.c-veryrare { color:#FF55FF; }
+
+/* ── DIVIDER ─────────────────────────────────────────────── */
+.divider {
+  height:1px; margin:22px 0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
+}
+
+/* ── ERROR / EMPTY ───────────────────────────────────────── */
+.err {
+  padding:32px 24px; text-align:center;
+  border:1px solid rgba(255,80,80,.15);
+  color:rgba(255,120,120,.7); font-size:12px; letter-spacing:2px;
+}
+.empty {
+  padding:40px; text-align:center;
+  color:var(--t2); font-size:12px; letter-spacing:2px;
+}
+.sub-loader {
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:14px; padding:40px 0;
+}
+
+/* ── INVENTORY COUNT ─────────────────────────────────────── */
+.inv-bar {
+  display:flex; gap:4px; flex-wrap:wrap; margin-bottom:20px;
+}
+.inv-slot {
+  width:28px; height:28px;
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
+  flex-shrink:0;
+}
+.inv-slot.filled { background:rgba(63,254,254,.06); border-color:rgba(63,254,254,.15); }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+footer {
+  text-align:center; padding:40px 0;
+  border-top:1px solid rgba(255,255,255,.04);
+  font-size:10px; letter-spacing:3px; color:var(--t3);
+}
+
+/* ── COPY TOAST ──────────────────────────────────────────── */
+.toast {
+  position:fixed; bottom:28px; right:28px;
+  padding:12px 22px;
+  background:rgba(20,20,20,.95); border:1px solid var(--cy);
+  color:var(--cy); font-family:'Space Mono',monospace; font-size:11px; letter-spacing:2px;
+  transform:translateY(80px); opacity:0;
+  transition:all .3s; z-index:999;
+}
+.toast.show { transform:translateY(0); opacity:1; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media(max-width:600px){
+  .player-pills { display:none; }
+  .hero-sub { letter-spacing:3px; }
+  .sg { grid-template-columns:repeat(2,1fr); }
+  .skills-grid { grid-template-columns:1fr; }
+  .action-bar { justify-content:center; }
+  .server-pills .pill-txt { display:none; }
+  .card-inner { padding:20px; }
+}
 </style>
-
 </head>
-
 <body>
+<div class="ambient"></div>
+<div class="grain"></div>
+
+<div class="wrap">
+<!-- ── HEADER ─── -->
+<header>
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <span class="logo-text">STATSCARD</span>
+  </div>
+  <div class="server-pills">
+    <div class="server-pill">
+      <img src="https://website.donutsmp.org/bcGCsev.png" alt="Donut" />
+      <span class="pill-txt" style="letter-spacing:2px;font-size:10px;">DONUT SMP</span>
+    </div>
+    <div class="server-pill">
+      <img src="https://static.wikia.nocookie.net/logopedia/images/9/9f/Hypixel_2015_%28Icon%29.png/revision/latest?cb=20221026120925" alt="Hypixel" />
+      <span class="pill-txt" style="letter-spacing:2px;font-size:10px;">HYPIXEL</span>
+    </div>
+  </div>
+</header>
+</div><!-- end wrap for header -->
+
+<!-- ── TICKER ─── -->
+<div class="ticker">
+  <span class="ticker-inner">
+    DONUT&nbsp;SMP&nbsp;&nbsp;★&nbsp;&nbsp;HYPIXEL&nbsp;SKYBLOCK&nbsp;&nbsp;★&nbsp;&nbsp;PLAYER&nbsp;STATS&nbsp;&nbsp;★&nbsp;&nbsp;CARD&nbsp;MAKER&nbsp;&nbsp;★&nbsp;&nbsp;SKILLS&nbsp;&nbsp;★&nbsp;&nbsp;PETS&nbsp;&nbsp;★&nbsp;&nbsp;GEAR&nbsp;&nbsp;★&nbsp;&nbsp;ACCESSORIES&nbsp;&nbsp;★&nbsp;&nbsp;
+    DONUT&nbsp;SMP&nbsp;&nbsp;★&nbsp;&nbsp;HYPIXEL&nbsp;SKYBLOCK&nbsp;&nbsp;★&nbsp;&nbsp;PLAYER&nbsp;STATS&nbsp;&nbsp;★&nbsp;&nbsp;CARD&nbsp;MAKER&nbsp;&nbsp;★&nbsp;&nbsp;SKILLS&nbsp;&nbsp;★&nbsp;&nbsp;PETS&nbsp;&nbsp;★&nbsp;&nbsp;GEAR&nbsp;&nbsp;★&nbsp;&nbsp;ACCESSORIES&nbsp;&nbsp;★&nbsp;&nbsp;
+  </span>
+</div>
 
 <div class="wrap">
 
-  <header>
+<!-- ── HERO ─── -->
+<section class="hero">
+  <h1 class="hero-title">PLAYER<br><span class="yl">STATS</span></h1>
+  <p class="hero-sub">Donut SMP &amp; Hypixel Skyblock · Card Maker</p>
 
-    <div class="avatar">
-
-      <img id="avatarImg" 
-
-           src="https://skin.laby.net/api/render/user/38a27d59-1c8d-4eb2-a27c-530612b07cfb.png?shadow=true&bust=true" 
-
-           alt="avatar" 
-
-           onerror="this.src='https://via.placeholder.com/64/1dd672/FFFFFF?text=?'">
-
+  <div class="search-wrap">
+    <div class="search-box">
+      <input class="search-input" id="inp" type="text" placeholder="Enter Minecraft username…" autocomplete="off" spellcheck="false" />
+      <button class="search-btn" id="searchBtn">SEARCH</button>
     </div>
-
-    <div>
-
-      <h1 id="oneLine">—</h1>
-
-      <div class="subtitle">MeowAPI - Enabled</div>
-      <div class="subtitle profile-name" id="profileNameOutput"></div>
-
-    </div>
-
-  </header>
-
-
-
-  <div class="card input-box">
-
-    <input type="text" id="uuidInput" placeholder="Enter Username">
-
-    <button class="show-btn" id="refreshBtn">Show Stats</button>
-
+    <p class="hint">press enter or click search · url params supported: ?user=username</p>
   </div>
+</section>
 
-
-
-  <div class="card">
-
-    <div id="output" class="muted">Enter username above...</div>
-
-  </div>
-
+<!-- ── SHIMMER ─── -->
+<div class="shimmer-wrap" id="shimWrap">
+  <p class="shimmer" id="shimTxt">Showing Statistics</p>
 </div>
 
+<!-- ── LOADER ─── -->
+<div class="loader-wrap" id="loaderWrap">
+  <div class="spin"></div>
+  <span class="loader-txt">FETCHING PLAYER DATA…</span>
+</div>
 
+<!-- ── RESULTS ─── -->
+<section class="results" id="results">
 
+  <div class="action-bar">
+    <button class="action-btn share-btn" id="shareBtn">
+      <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+      SHARE LINK
+    </button>
+    <button class="action-btn" id="downloadBtn">
+      <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      DOWNLOAD CARD
+    </button>
+  </div>
+
+  <div class="card" id="card">
+    <div class="card-bl"></div>
+
+    <div class="card-inner">
+      <!-- player header -->
+      <div class="player-head" id="playerHead"></div>
+
+      <!-- tabs -->
+      <div class="tabs-nav" id="tabsNav">
+        <button class="tab-btn on" data-tab="donut" onclick="switchTab('donut',this)">
+          <img src="https://website.donutsmp.org/bcGCsev.png" alt="" />
+          DONUT SMP
+        </button>
+        <button class="tab-btn cy" data-tab="hypixel" onclick="switchTab('hypixel',this)">
+          <img src="https://static.wikia.nocookie.net/logopedia/images/9/9f/Hypixel_2015_%28Icon%29.png/revision/latest?cb=20221026120925" alt="" />
+          HYPIXEL SKYBLOCK
+        </button>
+      </div>
+
+      <!-- Donut panel -->
+      <div class="tab-panel on" id="tab-donut">
+        <div id="donutContent">
+          <div class="sub-loader"><div class="spin"></div><span class="loader-txt">LOADING…</span></div>
+        </div>
+      </div>
+
+      <!-- Hypixel panel -->
+      <div class="tab-panel" id="tab-hypixel">
+        <div id="hypixelContent">
+          <div class="sub-loader"><div class="spin"></div><span class="loader-txt">LOADING…</span></div>
+        </div>
+      </div>
+    </div><!-- card-inner -->
+  </div><!-- card -->
+</section>
+
+<!-- ── FOOTER ─── -->
+<footer>STATSCARD &nbsp;·&nbsp; UNOFFICIAL FAN PROJECT &nbsp;·&nbsp; NOT AFFILIATED WITH DONUT SMP OR HYPIXEL</footer>
+
+</div><!-- wrap -->
+
+<!-- Toast -->
+<div class="toast" id="toast">Link copied to clipboard!</div>
+
+<!-- html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
+'use strict';
 
-// --- Helper Functions ---
+/* ── STATE ──────────────────────────────────────────────── */
+let currentUser = '';
+let allProfiles = [];
+let bestProfile = '';
+let currentProfile = '';
 
-function minecraftColorToHtml(text) {
-
-  const colorMap = {
-
-    '0': '#000000','1': '#0000AA','2': '#00AA00','3': '#00AAAA',
-
-    '4': '#AA0000','5': '#AA00AA','6': '#FFAA00','7': '#AAAAAA',
-
-    '8': '#555555','9': '#5555FF','a': '#55FF55','b': '#55FFFF',
-
-    'c': '#FF5555','d': '#FF55FF','e': '#FFFF55','f': '#FFFFFF'
-
-  };
-
-  if (!text) return "";
-
-  return text
-
-    .replace(/§([0-9a-f])/g, (_, c) => `<span style="color:${colorMap[c]||'#fff'}">`)
-
-    .replace(/§r/g, '</span>') + '</span>';
-
+/* ── RANK COLORS ─────────────────────────────────────────── */
+const RANK_COLORS = {
+  NONE:'#aaa', VIP:'#55FF55', 'VIP+':'#55FF55',
+  MVP:'#3FFEFE', 'MVP+':'#3FFEFE', 'MVP++':{badge:'#FFAA00',plus:'#FF55FF'},
+  ADMIN:'#FF5555', YOUTUBER:'#FF5555', HELPER:'#5555FF', MOD:'#55FF55',
+};
+function rankColor(r) {
+  if (!r) return '#aaa';
+  const n = r.name || r;
+  if (typeof RANK_COLORS[n] === 'object') return RANK_COLORS[n].badge;
+  return RANK_COLORS[n] || r.color || '#3FFEFE';
 }
 
+/* ── FORMAT ──────────────────────────────────────────────── */
+function fmt(n) {
+  if (n == null || n === undefined || isNaN(n)) return '—';
+  n = Number(n);
+  if (n >= 1e9) return (n/1e9).toFixed(2)+'B';
+  if (n >= 1e6) return (n/1e6).toFixed(2)+'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+  return n.toFixed(0);
+}
+function fmtTime(s) {
+  if (!s || isNaN(s)) return '—';
+  s = Number(s);
+  const d = Math.floor(s/86400);
+  const h = Math.floor((s%86400)/3600);
+  const m = Math.floor((s%3600)/60);
+  if (d > 0) return `${d}d ${h}h`;
+  if (h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+}
+function cap(s) { return s ? s.charAt(0).toUpperCase()+s.slice(1).toLowerCase() : ''; }
+function clean(s) { return s ? s.replace(/_/g,' ') : ''; }
 
+/* ── SKILL XP TABLES ─────────────────────────────────────── */
+const SKILL_XP = [50,125,200,300,500,750,1000,1500,2000,3500,5000,7500,10000,15000,20000,30000,50000,75000,100000,200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000,1500000,1600000,1700000,1800000,1900000,2000000,2100000,2200000,2300000,2400000,2500000,2600000,2750000,2900000,3100000,3400000,3700000,4000000];
+const DUNG_XP = [50,75,110,160,230,330,470,670,950,1340,1890,2650,3730,5260,7380,10300,14400,20200,28200,39500,55500,77700,108000,152000,213000,298000,418000,585000,819000,1150000,1580000,2220000,3120000,4380000,6150000,8630000,12100000,17000000,23800000,33400000,46800000,65700000,92000000,129000000,182000000,255000000,357000000,500000000,700000000,1000000000];
 
-function addHyphens(uuid) {
-
-  return uuid.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, "$1-$2-$3-$4-$5");
-
+function xpToLv(xp, maxLv = 50, table = SKILL_XP) {
+  if (!xp || xp <= 0) return 0;
+  let total = 0;
+  for (let i = 0; i < Math.min(maxLv, table.length); i++) {
+    total += table[i];
+    if (xp < total) return i;
+  }
+  return maxLv;
+}
+function xpPct(xp, maxLv = 50, table = SKILL_XP) {
+  if (!xp || xp <= 0) return 0;
+  let total = 0;
+  for (let i = 0; i < Math.min(maxLv, table.length); i++) {
+    const req = table[i];
+    if (xp < total + req) return Math.round(((xp - total) / req) * 100);
+    total += req;
+  }
+  return 100;
 }
 
+/* ── APIs ────────────────────────────────────────────────── */
+async function apiFetch(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+const donutUrl  = u => `https://donutstats.co/api.php?path=%2Fstats%2F${u}`;
+const hypUrl    = u => `https://statsapi.tem.cx/player/${u}?customization=`;
+const profUrl   = (u,p) => `https://statsapi.tem.cx/player/${u}/${p}?customization=true`;
 
-
-function cleanName(name) {
-
-  if (!name) return "";
-  
-  // Regex to remove a wide range of Hypixel/Minecraft symbols
-  let cleaned = name.replace(/[✪✿✦⚚➎★☆◆◇■□●○◎☀☁☂☃☄☾☽♛♕♚♔♤♡♢♧♠♥♦♣⚜⚡✨❖⬥⬦⬧⬨⬩⭐🌟🟊❶-❿⓿-➓IVXLCᛚ⏣]+/g, "").trim();
-
-  // New specific cleanup for common, undesirable prefixes like 'apis'
-  cleaned = cleaned.replace(/apis/i, '').trim(); // Remove "apis" regardless of case
-  
-  return cleaned;
-
+/* ── FIND BEST PROFILE ───────────────────────────────────── */
+async function getBestProfile(user, profiles) {
+  const fetched = await Promise.allSettled(profiles.map(p =>
+    apiFetch(profUrl(user, p.name)).then(d => ({ name: p.name, data: d }))
+  ));
+  let best = null, bestScore = -Infinity;
+  for (const r of fetched) {
+    if (r.status !== 'fulfilled') continue;
+    const { name, data } = r.value;
+    const m = data.member;
+    if (!m) continue;
+    const purse = Number(m.purse) || 0;
+    // avg skill from skills obj or XP fields
+    let avgSkill = 0;
+    const SKILL_NAMES = ['combat','farming','fishing','foraging','mining','enchanting','alchemy','taming'];
+    if (m.skills) {
+      const vals = SKILL_NAMES.map(n => Number(m.skills[n]) || 0);
+      avgSkill = vals.reduce((a,b) => a+b, 0) / vals.length;
+    } else {
+      const vals = SKILL_NAMES.map(n => xpToLv(m[`experience_skill_${n}`] || 0));
+      avgSkill = vals.reduce((a,b) => a+b, 0) / vals.length;
+    }
+    const score = purse + avgSkill * 5e5;
+    if (score > bestScore) { bestScore = score; best = { name, data }; }
+  }
+  return best;
 }
 
-
-
-function formatCoins(num) {
-
-  if (!isFinite(num)) return "0";
-  const numAbs = Math.abs(num);
-
-  // Use standard SI prefixes for large numbers (Quadrillion, Trillion, Billion, Million, Thousand)
-  if (numAbs >= 1e15) return (num / 1e15).toFixed(1) + "Q"; // Quadrillion
-
-  if (numAbs >= 1e12) return (num / 1e12).toFixed(1) + "T"; // Trillion
-
-  if (numAbs >= 1e9) return (num / 1e9).toFixed(1) + "B"; // Billion
-
-  if (numAbs >= 1e6) return (num / 1e6).toFixed(1) + "M"; // Million
-
-  if (numAbs >= 1e3) return (num / 1e3).toFixed(0) + "K"; // Thousand (0 decimal for K)
-
-  return Math.floor(num).toString();
-
+/* ── RENDER PLAYER HEAD ──────────────────────────────────── */
+function renderHead(user, rank) {
+  const rc = rankColor(rank);
+  const rn = rank?.name || '';
+  document.getElementById('playerHead').innerHTML = `
+    <div class="skin-wrap">
+      <img class="skin" src="https://vzge.me/bust/${user}.png?autocrop" alt="${user}"
+           onerror="this.src='https://vzge.me/bust/MHF_Steve.png'" crossorigin="anonymous" />
+      <div class="skin-glow"></div>
+    </div>
+    <div class="player-meta">
+      <h2>${user}</h2>
+      ${rn && rn !== 'NONE' ? `<div class="rank-badge" style="color:${rc};border-color:${rc};">${rn}</div>` : ''}
+    </div>
+    <div class="player-pills">
+      <div class="mpill"><span class="dot" style="background:var(--or)"></span>DONUT SMP</div>
+      <div class="mpill"><span class="dot" style="background:var(--cy)"></span>HYPIXEL</div>
+    </div>
+  `;
 }
 
+/* ── RENDER DONUT ────────────────────────────────────────── */
+function renderDonut(d) {
+  const el = document.getElementById('donutContent');
+  if (!d || d.error || d.message) {
+    el.innerHTML = `<div class="err">⚠ Player not found on Donut SMP or API unavailable</div>`; return;
+  }
+  // Try various field names
+  const get = (...keys) => { for (const k of keys) { if (d[k] != null) return d[k]; } return null; };
+  const money      = get('money','balance','coins');
+  const shards     = get('shards','shard');
+  const playtime   = get('playtime','play_time','time_played');
+  const kills      = get('kills','player_kills');
+  const deaths     = get('deaths','player_deaths');
+  const kd         = (kills != null && deaths != null && deaths > 0) ? (kills/deaths).toFixed(2) : '0.00';
+  const bPlaced    = get('blocks_placed','blocksPlaced');
+  const bBroken    = get('blocks_broken','blocksBroken');
+  const mobs       = get('mobs_killed','mob_kills','mobsKilled');
+  const spent      = get('shop_spent','shopSpent');
+  const earned     = get('sell_earned','sellEarned','money_earned');
 
-function getSkillAverage(member) {
-  const skills = member.skills || {};
-  let totalLevel = 0;
-  let skillCount = 0;
-  
-  // Skill names typically used for skill average calculation
-  const skillNames = ["alchemy", "carpentry", "combat", "enchanting", "farming", "fishing", "foraging", "mining", "taming"];
-  
-  for (const name of skillNames) {
-    if (skills[name] && skills[name].levelWithProgress) {
-      totalLevel += skills[name].levelWithProgress;
-      skillCount++;
+  const sc = (lbl, val, mod='') => `
+    <div class="sc">
+      <div class="sc-label">${lbl}</div>
+      <div class="sc-value or">${val}</div>
+    </div>`;
+
+  el.innerHTML = `
+    <div class="stitle">Donut SMP Statistics</div>
+    <div class="sg">
+      ${sc('Money',        money!=null ? '$'+fmt(money) : '—')}
+      ${sc('Shards',       shards!=null ? fmt(shards) : '—')}
+      ${sc('Playtime',     fmtTime(playtime))}
+      ${sc('Kills',        kills!=null ? fmt(kills) : '—')}
+      ${sc('Deaths',       deaths!=null ? deaths : '—')}
+      ${sc('K/D Ratio',    kd)}
+      ${sc('Blocks Placed',bPlaced!=null ? fmt(bPlaced) : '—')}
+      ${sc('Blocks Broken',bBroken!=null ? fmt(bBroken) : '—')}
+      ${sc('Mobs Killed',  mobs!=null ? fmt(mobs) : '—')}
+      ${sc('Shop Spent',   spent!=null ? '$'+fmt(spent) : '—')}
+      ${sc('Sell Earned',  earned!=null ? '$'+fmt(earned) : '—')}
+    </div>`;
+}
+
+/* ── SKILL NAMES & ICONS ─────────────────────────────────── */
+const SKILLS = ['alchemy','carpentry','combat','enchanting','farming','fishing','foraging','mining','runecrafting','social','taming'];
+const SKILL_ICONS = {alchemy:'⚗',carpentry:'🪵',combat:'⚔',enchanting:'✨',farming:'🌾',fishing:'🎣',foraging:'🌲',mining:'⛏',runecrafting:'🔮',social:'💬',taming:'🐾'};
+const SKILL_MAX = {runecrafting:25, social:25};
+
+/* ── EXTRACT SKILLS ──────────────────────────────────────── */
+function extractSkills(m) {
+  const out = {};
+  for (const s of SKILLS) {
+    // Direct level
+    if (m.skills?.[s] != null) { out[s] = { lv: Number(m.skills[s]), pct: 100 }; continue; }
+    // XP-based
+    const xpKey = `experience_skill_${s}`;
+    const xp = m[xpKey] ?? m.experience?.[xpKey];
+    if (xp != null) {
+      const max = SKILL_MAX[s] || 60;
+      out[s] = { lv: xpToLv(xp, max), pct: xpPct(xp, max) };
     }
   }
-  
-  return skillCount > 0 ? (totalLevel / skillCount) : 0;
+  return out;
 }
 
+/* ── EXTRACT PETS ────────────────────────────────────────── */
+const PET_ICONS = {
+  cat:'🐱',dog:'🐶',lion:'🦁',dragon:'🐉',bee:'🐝',sheep:'🐑',phoenix:'🦅',tiger:'🐯',rabbit:'🐰',
+  pig:'🐷',jellyfish:'🪼',elephant:'🐘',horse:'🐴',wolf:'🐺',fox:'🦊',owl:'🦉',bat:'🦇',
+  parrot:'🦜',turtle:'🐢',dolphin:'🐬',blaze:'🔥',enderman:'👾',skeleton:'💀',zombie:'🧟',
+  spider:'🕷',endermite:'🪲',silverfish:'🦗',ghast:'👻',slime:'💚',magmacube:'🔴',
+};
+function petIcon(type) { return PET_ICONS[(type||'').toLowerCase()] || '🐾'; }
 
-// Base64 encoding function
-function encodeBase64Payload(username, profileName) {
-    const payload = [{"uuid":1,"profileId":2}, username, profileName];
-    const jsonString = JSON.stringify(payload);
-    let encoded = btoa(jsonString);
-
-    while (encoded.endsWith('=')) {
-        encoded = encoded.slice(0, -1);
-    }
-    
-    return encoded;
+/* ── RARITY CLASS ────────────────────────────────────────── */
+function rc(r) {
+  return 'c-'+(r||'common').toLowerCase().replace(/\s+/g,'').replace('very_rare','veryrare');
 }
 
+/* ── RENDER HYPIXEL ──────────────────────────────────────── */
+function renderHypixel(data, profiles, bestName, user) {
+  const el = document.getElementById('hypixelContent');
+  if (!data) { el.innerHTML = `<div class="err">⚠ No Skyblock data found</div>`; return; }
+  const m = data.member;
+  if (!m) { el.innerHTML = `<div class="err">⚠ Profile data unavailable</div>`; return; }
 
-// --- Main Fetch Function ---
-async function fetchStats() {
+  /* ── Profile selector ── */
+  const profSel = profiles.map(p => `
+    <button class="profile-btn${p.name===currentProfile?' on':''}"
+            onclick="loadProfile('${user}','${p.name}')">
+      ${p.name}${p.name===bestName?'<span class="best-tag">BEST</span>':''}
+    </button>`).join('');
 
-  const input = document.getElementById('uuidInput');
-  const avatarImg = document.getElementById('avatarImg');
-  const oneLine = document.getElementById('oneLine');
-  const out = document.getElementById('output');
-  const profileNameOutput = document.getElementById('profileNameOutput');
-  const username = input.value.trim();
+  /* ── Key stats ── */
+  const purse = m.purse != null ? fmt(Number(m.purse)) : '—';
+  const fairy = m.fairy_souls_collected ?? m.fairy_souls ?? null;
 
+  /* ── Skills ── */
+  const skills = extractSkills(m);
+  const avgKeys = SKILLS.filter(s => !['runecrafting','social','carpentry'].includes(s));
+  const avgSkill = avgKeys.length
+    ? (avgKeys.reduce((s,k) => s+(skills[k]?.lv||0),0)/avgKeys.length).toFixed(2)
+    : '—';
 
+  /* ── Pets ── */
+  const pets = (m.pets || []).filter(p => p && (p.type||p.name));
 
-  if (!username) {
+  /* ── Accessories ── */
+  const accList = m.talisman_bag || m.accessory_bag || m.accessories || [];
+  const accArr = Array.isArray(accList) ? accList.filter(Boolean) : [];
+  const accByRarity = {};
+  accArr.forEach(item => {
+    const r = (item.rarity||item.tier||'common').toLowerCase();
+    accByRarity[r] = (accByRarity[r]||0)+1;
+  });
+  const RARITY_ORDER = ['special','mythic','divine','legendary','epic','rare','uncommon','common'];
 
-    out.textContent = "⚠️ Enter a username.";
-    profileNameOutput.textContent = "";
-    return;
+  /* ── Gear ── */
+  const armor = (m.inventory?.armor || m.armor_contents || m.equipped_armor || []).filter(Boolean);
+  const equip = (m.inventory?.equipment || m.equipment_contents || []).filter(Boolean);
+  const weapons = (m.inventory?.hotbar || []).filter(item => item && item.id &&
+    ['sword','bow','rod','wand','staff','blade','scythe','rifle'].some(w => (item.id||'').toLowerCase().includes(w)));
+  const gearItems = [...armor.slice(0,4), ...equip.slice(0,4), ...weapons.slice(0,4)];
 
+  /* ── Inventory count ── */
+  const invArr = m.inventory?.items || m.items || [];
+  const invCount = Array.isArray(invArr) ? invArr.filter(Boolean).length : 0;
+  const invTotal = Array.isArray(invArr) ? invArr.length : 36;
+
+  el.innerHTML = `
+    <div class="profile-sel">${profSel}</div>
+
+    <div class="stitle cy">Key Stats</div>
+    <div class="sg">
+      <div class="sc"><div class="sc-label">Purse</div><div class="sc-value cy">${purse}</div><div class="sc-sub">coins</div></div>
+      <div class="sc"><div class="sc-label">Avg Skill Level</div><div class="sc-value cy">${avgSkill}</div></div>
+      <div class="sc"><div class="sc-label">Fairy Souls</div><div class="sc-value cy">${fairy??'—'}</div></div>
+      <div class="sc"><div class="sc-label">Active Pets</div><div class="sc-value cy">${pets.length||'—'}</div></div>
+      <div class="sc"><div class="sc-label">Accessories</div><div class="sc-value cy">${accArr.length||'—'}</div></div>
+      <div class="sc"><div class="sc-label">Inventory</div><div class="sc-value cy">${invCount||'—'}<span class="sc-sub"> / ${invTotal}</span></div></div>
+    </div>
+
+    ${Object.keys(skills).length ? `
+    <div class="divider"></div>
+    <div class="stitle cy">Skills</div>
+    <div class="skills-grid" id="skillsGrid">
+      ${SKILLS.filter(s => skills[s]).map(s => {
+        const {lv, pct} = skills[s];
+        const max = SKILL_MAX[s]||60;
+        return `<div class="skill-row">
+          <div class="skill-hd">
+            <span class="skill-name">${SKILL_ICONS[s]||''} ${cap(s)}</span>
+            <span class="skill-lv">${lv}</span>
+          </div>
+          <div class="bar"><div class="bar-fill" data-pct="${pct}"></div></div>
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+
+    ${gearItems.length ? `
+    <div class="divider"></div>
+    <div class="stitle cy">Gear</div>
+    <div class="items-grid">
+      ${gearItems.slice(0,12).map(item => {
+        const name = item.name || item.id || clean(item.type) || 'Item';
+        const rar = (item.rarity||item.tier||'common').toLowerCase();
+        const icon = rar.includes('legendary')?'⚔':rar.includes('epic')?'🗡':rar.includes('rare')?'🔱':'⚔';
+        return `<div class="item">
+          <div class="item-icon">${icon}</div>
+          <div><div class="item-name ${rc(rar)}">${name}</div><div class="item-rar ${rc(rar)}">${rar}</div></div>
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+
+    ${pets.length ? `
+    <div class="divider"></div>
+    <div class="stitle cy">Pets (${pets.length})</div>
+    <div class="pets-grid">
+      ${pets.slice(0,8).map(p => {
+        const type = p.type||p.name||'Pet';
+        const rar  = (p.tier||p.rarity||'common').toLowerCase();
+        const lv   = p.level || p.petLevel || '';
+        return `<div class="pet">
+          <div class="pet-icon">${petIcon(type)}</div>
+          <div class="pet-name">${clean(type)}</div>
+          <div class="pet-lv ${rc(rar)}">${cap(rar)}</div>
+          ${lv ? `<div class="pet-lv">Lv ${lv}</div>` : ''}
+        </div>`;
+      }).join('')}
+      ${pets.length>8 ? `<div class="pet" style="justify-content:center;align-items:center;display:flex;font-size:13px;color:var(--t2);letter-spacing:2px;">+${pets.length-8} MORE</div>` : ''}
+    </div>` : ''}
+
+    ${Object.keys(accByRarity).length ? `
+    <div class="divider"></div>
+    <div class="stitle cy">Accessories (${accArr.length} total)</div>
+    <div class="acc-grid">
+      ${RARITY_ORDER.filter(r => accByRarity[r]).map(r => `
+        <div class="sc">
+          <div class="sc-label ${rc(r)}">${r.toUpperCase()}</div>
+          <div class="sc-value ${rc(r)}">${accByRarity[r]}</div>
+        </div>`).join('')}
+    </div>` : ''}
+  `;
+
+  // Animate skill bars after render
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.bar-fill').forEach(el => {
+      const pct = el.dataset.pct;
+      setTimeout(() => el.style.width = pct+'%', 80);
+    });
+  });
+}
+
+/* ── LOAD PROFILE ────────────────────────────────────────── */
+async function loadProfile(user, name) {
+  currentProfile = name;
+  // Update selector buttons
+  document.querySelectorAll('.profile-btn').forEach(b => {
+    b.classList.toggle('on', b.textContent.trim().startsWith(name));
+  });
+  const el = document.getElementById('hypixelContent');
+  const prevSel = el.querySelector('.profile-sel')?.outerHTML || '';
+  el.innerHTML = prevSel + `<div class="sub-loader"><div class="spin"></div><span class="loader-txt">LOADING ${name.toUpperCase()}…</span></div>`;
+  try {
+    const data = await apiFetch(profUrl(user, name));
+    renderHypixel(data, allProfiles, bestProfile, user);
+  } catch(e) {
+    el.innerHTML = prevSel + `<div class="err">⚠ Could not load ${name}: ${e.message}</div>`;
   }
+}
 
+/* ── TAB SWITCH ──────────────────────────────────────────── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  btn.classList.add('on');
+}
 
+/* ── MAIN SEARCH ─────────────────────────────────────────── */
+async function doSearch() {
+  const user = document.getElementById('inp').value.trim();
+  if (!user) return;
+  currentUser = user;
 
-  out.textContent = "Fetching data and finding best profile...";
-  oneLine.textContent = "Loading...";
-  profileNameOutput.textContent = "";
+  // Update URL without reload
+  const url = new URL(window.location.href);
+  url.searchParams.set('user', user);
+  window.history.replaceState({}, '', url);
 
+  // Show loader
+  document.getElementById('loaderWrap').classList.add('on');
+  document.getElementById('results').classList.remove('on');
+  document.getElementById('shimWrap').classList.remove('on');
 
+  // Reset tabs
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('on', i===0));
+  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('on', i===0));
+
+  // Reset content areas
+  document.getElementById('donutContent').innerHTML = `<div class="sub-loader"><div class="spin"></div><span class="loader-txt">LOADING DONUT…</span></div>`;
+  document.getElementById('hypixelContent').innerHTML = `<div class="sub-loader"><div class="spin"></div><span class="loader-txt">LOADING HYPIXEL…</span></div>`;
 
   try {
+    // Fetch both in parallel
+    const [donutRes, hypRes] = await Promise.allSettled([
+      apiFetch(donutUrl(user)),
+      apiFetch(hypUrl(user))
+    ]);
 
-    // 1. Fetch Hypixel Player Data (to get UUID and minigame stats)
-    const playerRes = await fetch(`https://api.soopy.dev/player/${encodeURIComponent(username)}`);
-    const playerJson = await playerRes.json();
-    if (!playerJson.success || !playerJson.data) throw new Error("Invalid player data or API error.");
+    // Get rank from hypixel data
+    const hypData = hypRes.status === 'fulfilled' ? hypRes.value : null;
+    const rank = hypData?.player?.rank || hypData?.rank || null;
 
+    // Shimmer + results
+    document.getElementById('shimTxt').textContent = `Showing Statistics for ${user}`;
+    document.getElementById('shimWrap').classList.add('on');
+    document.getElementById('loaderWrap').classList.remove('on');
+    document.getElementById('results').classList.add('on');
 
+    // Player header
+    renderHead(user, rank);
 
-    const uuidRaw = playerJson.data.uuid || "";
-    const uuid = uuidRaw.replace(/-/g, "");
-    const uuidHyphen = addHyphens(uuid);
-
-
-
-    const prefix = playerJson.data.prefix || "";
-    const name = playerJson.data.name || playerJson.data.username || username;
-    const nameWithPrefix = playerJson.data.stats?.nameWithPrefix || playerJson.data.nameWithPrefix || (prefix ? `${prefix} ${name}` : name);
-    const formattedName = minecraftColorToHtml(nameWithPrefix);
-
-
-
-    // Set skin preview
-    avatarImg.src = `https://skin.laby.net/api/render/user/${uuidHyphen}.png?shadow=true&bust=true`;
-
-
-
-    // Minigame Stats (from player data)
-    const ach = playerJson.data.achievements || {};
-    const skywarsStars = ach.skywars_you_re_a_star || 0;
-    const arcadeCoins = ach.arcade_arcade_banker || 0;
-    const bedwarsStars = ach.bedwars_level || 0;
-    const uhcBounty = ach.uhc_bounty || 0;
-    const pitGold = ach.pit_gold || 0;
-
-
-
-    // 2. Fetch SkyBlock Data (all profiles, with networth)
-    const skyRes = await fetch(`https://soopy.dev/api/v2/player_skyblock/${uuid}?networth=true`);
-    const skyJson = await skyRes.json();
-    
-    // --- BEST PROFILE SELECTION LOGIC ---
-    let bestMember = null;
-    let bestCuteName = "N/A";
-    let maxScore = -1;
-    let profilesData = skyJson.data?.profiles || {};
-
-    for (const profileId in profilesData) {
-        const profile = profilesData[profileId];
-        const member = profile.members?.[uuid];
-        
-        if (member) {
-            // Get key stats for scoring
-            const networth = member.nwDetailed?.networth || 0;
-            const skillAvg = getSkillAverage(member);
-            const sbLvl = member.skyblock_level || 0;
-
-            // Simple Scoring Formula (Networth is the primary factor)
-            const score = (networth / 1000000) * 100 + (skillAvg * 100) + (sbLvl * 10);
-            
-            if (score > maxScore) {
-                maxScore = score;
-                bestMember = member;
-                bestCuteName = profile.stats?.cute_name || profile.stats?.profile_name || "Unknown Profile";
-            }
-        }
-    }
-    // --- END PROFILE SELECTION LOGIC ---
-
-    // 3. Use the Best Profile Data for Output
-    let coins = 0, kills = 0, fairy = 0, types = {}, networth = 0, sbLvl = 0;
-    let avgSkillLevel = 0;
-    
-    if (bestMember) {
-        coins = bestMember.coin_purse || 0;
-        kills = bestMember.kills?.total || 0;
-        fairy = bestMember.fairy_souls_collected || 0;
-        sbLvl = bestMember.skyblock_level || 0;
-        types = bestMember.nwDetailed?.types || {};
-        networth = bestMember.nwDetailed?.networth || 0;
-        avgSkillLevel = getSkillAverage(bestMember).toFixed(2);
-        
-        if (networth === 0 && coins > 0) {
-            networth = coins;
-        }
+    // Donut
+    if (donutRes.status === 'fulfilled') {
+      renderDonut(donutRes.value);
+    } else {
+      document.getElementById('donutContent').innerHTML =
+        `<div class="err">⚠ ${donutRes.reason?.message||'Could not load Donut SMP stats'}</div>`;
     }
 
-
-    const collectItems = (t) => (t?.items?.length ? t.items.map(i => cleanName(i.name)) : []);
-    const sections = [
-      ...collectItems(types.armor),
-      ...collectItems(types.equipment),
-      ...collectItems(types.wardrobe),
-      ...collectItems(types.weapons),
-      ...collectItems(types.inventory)
-    ];
-    // Filter out any entries that ended up empty after cleaning (e.g., if an item name was ONLY 'apis')
-    const itemList = sections.filter(item => item).join(", ");
-
-
-    // 4. Generate Final Output String
-    const parts = [];
-    
-    if (networth > 0) parts.push(`NW: ${formatCoins(networth)}`);
-    if (coins > 0) parts.push(`Purse: ${formatCoins(coins)}`);
-    if (avgSkillLevel > 0) parts.push(`Avg_Skill: ${avgSkillLevel}`);
-    if (skywarsStars > 0) parts.push(`SW: ${skywarsStars}`);
-    if (bedwarsStars > 0) parts.push(`BW: ${bedwarsStars}`);
-    if (pitGold > 0) parts.push(`Pit_Gold: ${formatCoins(pitGold)}`);
-    if (uhcBounty > 0) parts.push(`UHC_Bounty: ${formatCoins(uhcBounty)}`);
-    if (sbLvl > 0) parts.push(`Sb_Lvl: ${sbLvl}`);
-    if (arcadeCoins > 0) parts.push(`Arcade_Coins: ${formatCoins(arcadeCoins)}`);
-    
-    // Add additional stats
-    if (kills > 0) parts.push(`Sb_Kills: ${kills}`);
-    if (fairy > 0) parts.push(`Sb_Fairy_Souls: ${fairy}`);
-    if (itemList) parts.push(`Sb_Valuable_Items: ${itemList}`);
-    
-
-    oneLine.innerHTML = formattedName || name;
-    profileNameOutput.textContent = `(Best Profile: ${bestCuteName})`;
-    
-    // Final output is JUST the stats string
-    out.textContent = parts.join(" ") 
-        || "No significant stats found for this player/profile.";
-
-  } catch (err) {
-
-    console.error(err);
-
-    out.textContent = "❌ Failed to fetch stats. Check console for details or ensure the username is correct.";
-
-    oneLine.textContent = "—";
-    profileNameOutput.textContent = "";
-
+    // Hypixel
+    if (hypData) {
+      const profiles = hypData.player?.profiles || hypData.profiles || [];
+      allProfiles = profiles;
+      if (profiles.length) {
+        document.getElementById('hypixelContent').innerHTML =
+          `<div class="sub-loader"><div class="spin"></div><span class="loader-txt">FINDING BEST PROFILE…</span></div>`;
+        try {
+          const best = await getBestProfile(user, profiles);
+          if (best) {
+            bestProfile = best.name; currentProfile = best.name;
+            renderHypixel(best.data, profiles, best.name, user);
+          } else {
+            // Fallback: load first
+            const f = profiles[0];
+            const d = await apiFetch(profUrl(user, f.name));
+            bestProfile = f.name; currentProfile = f.name;
+            renderHypixel(d, profiles, f.name, user);
+          }
+        } catch(e) {
+          document.getElementById('hypixelContent').innerHTML =
+            `<div class="err">⚠ Could not load Skyblock profiles: ${e.message}</div>`;
+        }
+      } else {
+        document.getElementById('hypixelContent').innerHTML =
+          `<div class="empty">No Skyblock profiles found for this player</div>`;
+      }
+    } else {
+      document.getElementById('hypixelContent').innerHTML =
+        `<div class="err">⚠ ${hypRes.reason?.message||'Player not found on Hypixel'}</div>`;
+    }
+  } catch(e) {
+    document.getElementById('loaderWrap').classList.remove('on');
+    document.getElementById('results').classList.add('on');
+    document.getElementById('donutContent').innerHTML = `<div class="err">⚠ ${e.message}</div>`;
   }
-
 }
 
-
-
-document.getElementById('refreshBtn').addEventListener('click', fetchStats);
-
-document.getElementById('uuidInput').addEventListener('keypress', e => {
-
-  if (e.key === 'Enter') fetchStats();
-
+/* ── DOWNLOAD ─────────────────────────────────────────────── */
+document.getElementById('downloadBtn').addEventListener('click', async () => {
+  const card = document.getElementById('card');
+  const btn = document.getElementById('downloadBtn');
+  btn.textContent = 'GENERATING…';
+  try {
+    const canvas = await html2canvas(card, {
+      backgroundColor:'#060606', scale:2,
+      useCORS:true, allowTaint:true, logging:false,
+    });
+    const a = document.createElement('a');
+    a.download = `${currentUser||'player'}_statscard.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } catch(e) {
+    alert('Download failed: '+e.message);
+  } finally {
+    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--y)"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> DOWNLOAD CARD`;
+  }
 });
 
+/* ── SHARE ────────────────────────────────────────────────── */
+document.getElementById('shareBtn').addEventListener('click', () => {
+  const url = new URL(window.location.href);
+  if (currentUser) url.searchParams.set('user', currentUser);
+  navigator.clipboard.writeText(url.toString()).then(() => {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  });
+});
+
+/* ── EVENTS ──────────────────────────────────────────────── */
+document.getElementById('searchBtn').addEventListener('click', doSearch);
+document.getElementById('inp').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
+
+/* ── AUTO-LOAD FROM URL PARAM ────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  const p = new URLSearchParams(window.location.search).get('user');
+  if (p) {
+    document.getElementById('inp').value = p;
+    doSearch();
+  }
+});
 </script>
-
 </body>
-
 </html>

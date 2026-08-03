@@ -10,6 +10,13 @@
 
 <style>
 
+/* Minecraft typeface for the rank badge */
+@font-face{
+font-family:'Minecraft';
+src:url('https://cdn.jsdelivr.net/gh/South-Paw/typeface-minecraft@master/files/minecraft.woff') format('woff');
+font-display:swap;
+}
+
 *{
 margin:0;
 padding:0;
@@ -17,37 +24,57 @@ box-sizing:border-box;
 font-family:'Inter',sans-serif;
 }
 
+html,body{
+width:100%;
+min-height:100%;
+}
+
 body{
+/* --glow stays deliberately low-alpha for both servers: the
+   backdrop should read as dark, only tinted, never bright */
+--glow:rgba(0,102,255,.13);
+--accent:#0066ff;
+--accent2:#00a2ff;
+
 background:#050505;
 color:white;
-min-height:100vh;
-padding:24px;
+
 overflow-x:hidden;
 }
 
+/* FULLSCREEN SHELL */
+
 .container{
-max-width:1500px;
-margin:auto;
+position:relative;
+width:100%;
+min-height:100vh;
 }
 
 .hero{
 position:relative;
 overflow:hidden;
-border-radius:30px;
-padding:38px;
+
+width:100%;
+min-height:100vh;
+
+padding:38px 46px 60px;
 
 background:
-radial-gradient(circle at top left,
-rgba(255,120,0,.12),
-transparent 30%),
+radial-gradient(circle at 12% 0%,
+var(--glow),
+transparent 42%),
+
+radial-gradient(circle at 88% 8%,
+var(--glow),
+transparent 46%),
 
 linear-gradient(
-135deg,
+160deg,
 #0b0b0c 0%,
-#050505 70%
+#050505 65%
 );
 
-border:1px solid rgba(255,255,255,.05);
+transition:background .55s ease;
 }
 
 /* SERVERS */
@@ -67,10 +94,17 @@ gap:12px;
 cursor:pointer;
 transition:.25s;
 overflow:hidden;
+
+opacity:.42;
 }
 
 .server:hover{
 transform:translateY(-2px);
+opacity:.8;
+}
+
+.server.active{
+opacity:1;
 }
 
 .server::before{
@@ -95,6 +129,10 @@ transform:translateX(-120%);
 animation:serverShine 3s linear infinite;
 }
 
+.server:not(.active)::before{
+display:none;
+}
+
 @keyframes serverShine{
 100%{
 transform:translateX(120%);
@@ -102,9 +140,15 @@ transform:translateX(120%);
 }
 
 .server img{
-width:30px;
-height:30px;
+width:32px;
+height:32px;
+
+/* logos have different aspect ratios - contain keeps them
+   undistorted inside a fixed square box */
 object-fit:contain;
+object-position:center;
+
+filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
 }
 
 .server span{
@@ -120,6 +164,7 @@ linear-gradient(
 );
 
 -webkit-background-clip:text;
+background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
@@ -139,13 +184,128 @@ flex-direction:column;
 justify-content:center;
 }
 
+.name-row{
+display:flex;
+align-items:center;
+gap:16px;
+flex-wrap:wrap;
+
+margin-bottom:24px;
+}
+
 .name{
+position:relative;
+
 font-size:72px;
 font-weight:800;
-line-height:1;
+line-height:1.05;
 letter-spacing:-4px;
-margin-bottom:24px;
+
 min-height:82px;
+
+white-space:nowrap;
+}
+
+/* SERVER-NAME FADE (replaces the typewriter) */
+
+.name.fading{
+animation:nameFade 3.4s ease-in-out infinite;
+}
+
+@keyframes nameFade{
+
+0%{
+opacity:0;
+filter:blur(14px);
+transform:translateY(6px) scale(.985);
+}
+
+18%,58%{
+opacity:1;
+filter:blur(0);
+transform:translateY(0) scale(1);
+}
+
+82%,100%{
+opacity:0;
+filter:blur(14px);
+transform:translateY(-6px) scale(.985);
+}
+
+}
+
+/* NAME + SHINE SWEEP
+   Lunar's shine is a narrow white bar tilted -20deg that sweeps
+   across once. On a button it is clipped to the button's own box;
+   here there is no box, so the bar is clipped to the glyphs with
+   background-clip:text - the light travels over the letters and
+   nothing rectangular is ever drawn. The base sits a little below
+   pure white so the highlight has room to read against it. */
+
+.name-wrap{
+position:relative;
+display:inline-block;
+}
+
+.name-wrap .name{
+color:rgba(255,255,255,.82);
+}
+
+.name-wrap .sweep{
+position:absolute;
+inset:0;
+
+pointer-events:none;
+
+color:transparent;
+-webkit-text-fill-color:transparent;
+
+background-repeat:no-repeat;
+
+/* the bar itself: 75px wide, tilted, parked off to the left */
+background-image:
+linear-gradient(
+110deg,
+transparent 0 44%,
+rgba(255,255,255,1) 44% 50%,
+transparent 50% 100%
+);
+
+background-size:600% 100%;
+background-position:130% 0;
+
+-webkit-background-clip:text;
+background-clip:text;
+}
+
+.name-wrap.shine .sweep{
+animation:nameSweep .6s 0s both
+cubic-bezier(.25,.46,.45,.94);
+}
+
+@keyframes nameSweep{
+from{ background-position:130% 0; }
+to{ background-position:-90% 0; }
+}
+
+/* RANK BADGE (Minecraft typeface) */
+
+/* No box: the rank reads as a coloured tag next to the name, the
+   way it does in chat. Colour alone carries it, so there is no
+   border or panel to sit slightly wrong against the name. */
+
+.rank-badge{
+display:inline-block;
+
+font-family:'Minecraft','Inter',sans-serif;
+font-size:20px;
+font-weight:400;
+line-height:1;
+letter-spacing:.5px;
+
+white-space:nowrap;
+
+text-shadow:0 2px 0 rgba(0,0,0,.6);
 }
 
 /* SEARCH */
@@ -199,12 +359,10 @@ transition:.25s;
 }
 
 .search-box input:focus{
-
-border-color:rgba(0,153,255,.6);
+border-color:var(--accent);
 
 box-shadow:
-0 0 0 4px rgba(0,153,255,.12);
-
+0 0 0 4px var(--glow);
 }
 
 .search-box input::placeholder{
@@ -228,8 +386,8 @@ overflow:hidden;
 background:
 linear-gradient(
 135deg,
-#0066ff,
-#00a2ff
+var(--accent),
+var(--accent2)
 );
 
 color:white;
@@ -302,6 +460,224 @@ transform:translateY(0px);
 
 }
 
+/* ACTIVE PROFILE (sits inline under the search, understated) */
+
+.profile-bar{
+display:flex;
+align-items:center;
+gap:14px;
+
+margin-top:20px;
+}
+
+.profile-bar:empty{
+display:none;
+}
+
+.profile-meta{
+display:flex;
+align-items:baseline;
+gap:9px;
+}
+
+.profile-meta .cap{
+font-size:11px;
+font-weight:800;
+letter-spacing:1.5px;
+text-transform:uppercase;
+
+color:#7c7c7c;
+}
+
+.profile-meta .pname{
+font-size:19px;
+font-weight:800;
+letter-spacing:-.3px;
+
+color:#f2f2f2;
+}
+
+.profile-meta .mode{
+font-size:11px;
+font-weight:800;
+letter-spacing:1px;
+
+padding:3px 8px;
+border-radius:5px;
+
+background:rgba(255,255,255,.08);
+color:#cfcfcf;
+}
+
+/* SECTION TITLE */
+
+.section-title{
+display:flex;
+align-items:center;
+gap:12px;
+
+grid-column:1/-1;
+
+margin-top:34px;
+margin-bottom:-6px;
+
+font-size:15px;
+font-weight:800;
+letter-spacing:1.6px;
+text-transform:uppercase;
+
+color:#8f8f8f;
+}
+
+.section-title::after{
+content:'';
+flex:1;
+height:1px;
+background:
+linear-gradient(
+90deg,
+rgba(255,255,255,.10),
+transparent
+);
+}
+
+/* GEAR PANELS (armor / equipment / weapons / inventory) */
+
+.panel{
+grid-column:1/-1;
+
+padding:26px 28px;
+
+border-radius:24px;
+
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,.025),
+rgba(255,255,255,.012)
+);
+
+border:1px solid rgba(255,255,255,.06);
+}
+
+.panel-head{
+display:flex;
+align-items:center;
+gap:12px;
+
+margin-bottom:20px;
+
+font-size:14px;
+font-weight:800;
+letter-spacing:1.2px;
+text-transform:uppercase;
+
+color:#c9c9c9;
+}
+
+.panel-head .count{
+font-size:11px;
+font-weight:700;
+letter-spacing:.6px;
+
+padding:3px 8px;
+border-radius:5px;
+
+background:rgba(255,255,255,.07);
+color:#9a9a9a;
+}
+
+.slots{
+display:grid;
+
+grid-template-columns:
+repeat(auto-fill,minmax(64px,1fr));
+
+gap:10px;
+}
+
+.slot{
+position:relative;
+
+aspect-ratio:1;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:12px;
+
+background:rgba(0,0,0,.34);
+border:1px solid rgba(255,255,255,.06);
+
+transition:.18s;
+}
+
+.slot.filled{
+cursor:help;
+}
+
+.slot.filled:hover{
+transform:translateY(-2px);
+border-color:rgba(255,255,255,.24);
+background:rgba(255,255,255,.05);
+}
+
+.slot img{
+width:74%;
+height:74%;
+object-fit:contain;
+
+image-rendering:pixelated;
+
+filter:drop-shadow(0 2px 4px rgba(0,0,0,.55));
+}
+
+.slot .qty{
+position:absolute;
+right:5px;
+bottom:3px;
+
+font-family:'Minecraft','Inter',sans-serif;
+font-size:12px;
+
+color:#fff;
+text-shadow:1px 1px 0 rgba(0,0,0,.9);
+}
+
+/* rarity ring, driven by the item's own name colour */
+.slot.filled::after{
+content:'';
+
+position:absolute;
+inset:-1px;
+
+border-radius:12px;
+border:1px solid var(--rar,transparent);
+
+opacity:.55;
+
+pointer-events:none;
+}
+
+.slot.empty{
+background:
+repeating-linear-gradient(
+45deg,
+rgba(255,255,255,.014) 0 6px,
+transparent 6px 12px
+);
+}
+
+.gear-note{
+margin-top:16px;
+
+font-size:13px;
+font-weight:600;
+
+color:#8b8b8b;
+}
+
 /* STATS */
 
 .stats{
@@ -317,6 +693,9 @@ margin-top:38px;
 
 .card{
 position:relative;
+
+/* lets .value size itself against the card width (cqw) */
+container-type:inline-size;
 
 padding:28px;
 
@@ -383,13 +762,77 @@ height:26px;
 object-fit:contain;
 }
 
-.value{
-font-size:58px;
-font-weight:800;
-letter-spacing:-2px;
-line-height:1;
+/* clamp() keeps long values ("696.5K", "76d 22h") on one line in
+   a narrow card instead of breaking mid-token, which is what
+   word-break:break-word did - it split "696.5K" into "696.5 K". */
 
-word-break:break-word;
+.value{
+/* cqw scales with the card, not the viewport, so a wide value
+   fits at any window size instead of only the narrow ones */
+font-size:clamp(24px,17cqw,52px);
+font-weight:800;
+letter-spacing:-1.5px;
+line-height:1.05;
+
+/* one line, scaled down if the value is wide ("76d 22h") rather
+   than broken mid-token the way word-break:break-word did */
+white-space:nowrap;
+
+overflow-wrap:normal;
+word-break:keep-all;
+}
+
+.value small{
+font-size:22px;
+font-weight:700;
+opacity:.45;
+letter-spacing:0;
+}
+
+.sub{
+margin-top:14px;
+
+font-size:13px;
+font-weight:600;
+
+color:#8b8b8b;
+}
+
+.bar{
+position:relative;
+
+height:7px;
+
+margin-top:14px;
+
+border-radius:99px;
+
+background:rgba(255,255,255,.07);
+
+overflow:hidden;
+}
+
+.bar i{
+position:absolute;
+inset:0 auto 0 0;
+
+border-radius:99px;
+
+background:
+linear-gradient(
+90deg,
+var(--accent),
+var(--accent2)
+);
+}
+
+.bar.gold i{
+background:
+linear-gradient(
+90deg,
+#e8bc42,
+#ffe08a
+);
 }
 
 /* COLORS */
@@ -402,6 +845,27 @@ word-break:break-word;
 .placed{color:#50e791}
 .broken{color:#e28a46}
 .mobs{color:#47dfaa}
+
+.skillavg{color:#ffd76a}
+.slayer{color:#ff8a5c}
+.souls{color:#7ce7ff}
+.minions{color:#ffc46b}
+.zones{color:#9fe0ff}
+.quests{color:#c7f06a}
+.secrets{color:#ffd76a}
+
+.combat{color:#ff6d6d}
+.mining{color:#8fd0ff}
+.farming{color:#8fe36a}
+.foraging{color:#5bd68a}
+.enchanting{color:#c98cff}
+.alchemy{color:#e07bff}
+.fishing{color:#4fc3f7}
+.taming{color:#ffb974}
+.carpentry{color:#d9a06b}
+.runecrafting{color:#8f9bff}
+.social{color:#6ee7a8}
+.hunting{color:#ff9f6b}
 
 .loading,
 .error{
@@ -418,13 +882,8 @@ color:#ff6b6b;
 
 @media(max-width:900px){
 
-body{
-padding:12px;
-}
-
 .hero{
-padding:20px;
-border-radius:22px;
+padding:16px 14px 40px;
 }
 
 .server-select{
@@ -456,8 +915,18 @@ max-width:70vw;
 .name{
 font-size:42px;
 letter-spacing:-2px;
-margin-bottom:18px;
 min-height:auto;
+}
+
+.name-row{
+justify-content:center;
+gap:10px;
+margin-bottom:18px;
+}
+
+.rank-badge{
+padding:7px 12px 5px;
+font-size:12px;
 }
 
 .search-wrap{
@@ -483,6 +952,31 @@ font-size:16px;
 border-radius:2px;
 }
 
+.profile-bar{
+margin-top:22px;
+gap:10px;
+justify-content:center;
+}
+
+.profile-meta .pname{
+font-size:16px;
+}
+
+.panel{
+padding:18px 16px;
+border-radius:18px;
+}
+
+.slots{
+grid-template-columns:repeat(auto-fill,minmax(52px,1fr));
+gap:8px;
+}
+
+.section-title{
+margin-top:26px;
+font-size:13px;
+}
+
 .stats{
 grid-template-columns:repeat(2,1fr);
 gap:14px;
@@ -496,6 +990,10 @@ border-radius:18px;
 
 .value{
 font-size:26px;
+}
+
+.value small{
+font-size:14px;
 }
 
 .label{
@@ -519,7 +1017,7 @@ font-size:15px;
 </style>
 </head>
 
-<body>
+<body data-server="donut">
 
 <div class="container">
 
@@ -527,18 +1025,23 @@ font-size:15px;
 
 <div class="server-select">
 
-<div class="server">
+<div class="server active"
+id="server-donut"
+onclick="setServer('donut')">
 
-<img src="https://website.donutsmp.org/bcGCsev.png">
+<img src="https://website.donutsmp.org/bcGCsev.png"
+alt="DonutSMP">
 
 <span>DonutSMP</span>
 
 </div>
 
 <div class="server"
-onclick="alert('Coming Soon...')">
+id="server-hypixel"
+onclick="setServer('hypixel')">
 
-<img src="https://static.wikia.nocookie.net/logopedia/images/9/9f/Hypixel_2015_%28Icon%29.png/revision/latest?cb=20221026120925">
+<img src="https://minecraft.wiki/images/Hypixel.png"
+alt="Hypixel">
 
 <span>Hypixel</span>
 
@@ -551,12 +1054,27 @@ onclick="alert('Coming Soon...')">
 <img
 id="skin"
 class="skin"
-src="https://vzge.me/bust/lovehutao1.png?autocrop">
+src="https://vzge.me/bust/lovehutao1.png?autocrop"
+alt="Player skin">
 
 <div class="left">
 
-<div id="playerName" class="name">
+<div class="name-row">
+
+<div id="nameWrap" class="name-wrap">
+
+<div id="playerName" class="name fading">
 DonutSMP
+</div>
+
+<div id="nameSweep"
+class="name sweep"
+aria-hidden="true"></div>
+
+</div>
+
+<div id="rankBadge"></div>
+
 </div>
 
 <div class="search-wrap">
@@ -564,12 +1082,13 @@ DonutSMP
 <div class="search-box">
 
 <div class="search-icon">
-⌕
+&#8981;
 </div>
 
 <input
 id="username"
-placeholder="Search Minecraft username...">
+placeholder="Search Minecraft username..."
+aria-label="Minecraft username">
 
 </div>
 
@@ -585,6 +1104,8 @@ Search
 </div>
 
 </div>
+
+<div id="profileBar" class="profile-bar"></div>
 
 <div id="stats" class="stats"></div>
 
@@ -610,70 +1131,956 @@ placed_blocks:'https://ccvaults.com/assets/20.%20Blocks/18.%20Decoration/Grass_B
 
 broken_blocks:'https://minecraft.wiki/images/Enchanted_Diamond_Pickaxe.gif?c7aaa&format=original',
 
-mobs_killed:'https://ccvaults.com/assets/80.%20Particles/trial_omen.png'
+mobs_killed:'https://ccvaults.com/assets/80.%20Particles/trial_omen.png',
+
+kd:'https://minecraft.wiki/images/Enchanted_Netherite_Sword.gif?a1a02&format=original'
 
 };
 
-/* TYPING EFFECT */
+/* HYPIXEL ICONS */
 
-const typingWords=[
+const hyIcons={
+
+purse:'https://ccvaults.com/assets/10.%20Items/11.%20Materials/Gold_Ingot.png',
+
+skillavg:'https://minecraft.wiki/images/Bottle_o%27_Enchanting.gif',
+
+slayer:'https://minecraft.wiki/images/Enchanted_Diamond_Sword.gif?f741f&format=original',
+
+souls:'https://minecraft.wiki/images/Nether_Star.gif',
+
+kills:'https://minecraft.wiki/images/Diamond_Axe_JE3_BE3.png',
+
+deaths:'https://ccvaults.com/assets/80.%20Particles/raid_omen.png',
+
+minions:'https://ccvaults.com/assets/20.%20Blocks/18.%20Decoration/Grass_Block.png',
+
+zones:'https://minecraft.wiki/images/Compass_JE3_BE3.gif?0043f&format=original',
+
+quests:'https://minecraft.wiki/images/Book_JE2_BE2.png',
+
+secrets:'https://minecraft.wiki/images/Ender_Pearl_JE3_BE2.png',
+
+combat:'https://minecraft.wiki/images/Enchanted_Diamond_Sword.gif?f741f&format=original',
+
+mining:'https://minecraft.wiki/images/Enchanted_Diamond_Pickaxe.gif?c7aaa&format=original',
+
+farming:'https://minecraft.wiki/images/Wheat_JE2_BE2.png',
+
+foraging:'https://ccvaults.com/assets/20.%20Blocks/18.%20Decoration/Grass_Block.png',
+
+enchanting:'https://minecraft.wiki/images/Enchanting_Table.gif',
+
+alchemy:'https://minecraft.wiki/images/Brewing_Stand_%28item%29_JE3_BE2.png',
+
+fishing:'https://minecraft.wiki/images/Fishing_Rod_JE2_BE2.png',
+
+taming:'https://minecraft.wiki/images/Lead_JE2_BE2.png',
+
+carpentry:'https://minecraft.wiki/images/Crafting_Table_JE4_BE3.png',
+
+runecrafting:'https://ccvaults.com/assets/10.%20Items/21.%20Decoration/Amethyst_Shard.png',
+
+social:'https://ccvaults.com/assets/10.%20Items/11.%20Materials/Emerald.png',
+
+hunting:'https://minecraft.wiki/images/Bow_JE2_BE1.png'
+
+};
+
+/* THEMES */
+
+/* Both servers share one background: the same blue --glow, so
+   switching to Hypixel does not tint the page orange. Only the
+   accents (buttons, headings, stat values) carry the server hue. */
+
+const SHARED_GLOW='rgba(0,102,255,.13)';
+
+const themes={
+
+donut:{
+glow:SHARED_GLOW,
+accent:'#0066ff',
+accent2:'#00a2ff'
+},
+
+/* Hypixel reuses the DonutSMP palette outright. Orange is
+   intrinsically brighter than blue at the same saturation
+   (#ff8a00 reads ~153 luminance against #0066ff at ~91), so any
+   orange accent lit the view up next to the DonutSMP one. Same
+   colours means the two views are identical, not just close. */
+
+hypixel:{
+glow:SHARED_GLOW,
+accent:'#0066ff',
+accent2:'#00a2ff'
+}
+
+};
+
+const HY_API='https://statsapi.tem.cx';
+
+let currentServer='donut';
+
+/* SERVER-NAME FADE CYCLE
+   Each word blurs in, holds, then blurs out. The swap happens
+   while the text is invisible, so it never appears to jump. */
+
+const idleWords=[
 'DonutSMP',
 'Hypixel'
 ];
 
-let typingIndex=0;
-let charIndex=0;
-let deleting=false;
+const FADE_MS=3400;
 
-function typingEffect(){
+let idleIndex=0;
+let idleTimer=null;
+let idleStopped=false;
 
-const element=
-document.getElementById('playerName');
+function startIdleFade(startIndex){
 
-const current=
-typingWords[typingIndex];
+idleStopped=false;
 
-if(!deleting){
+idleIndex=typeof startIndex==='number'
+? startIndex
+: 0;
 
-element.innerText=
-current.substring(0,charIndex++);
+const el=document.getElementById('playerName');
 
-if(charIndex>current.length){
+if(idleTimer){
+clearInterval(idleTimer);
+idleTimer=null;
+}
 
-deleting=true;
+el.innerText=idleWords[idleIndex];
+el.style.removeProperty('color');
 
-setTimeout(typingEffect,1200);
+/* restart the CSS animation cleanly */
+el.classList.remove('fading');
+void el.offsetWidth;
+el.classList.add('fading');
 
+idleTimer=setInterval(function(){
+
+if(idleStopped){
 return;
+}
 
+idleIndex=(idleIndex+1)%idleWords.length;
+
+el.innerText=idleWords[idleIndex];
+
+},FADE_MS);
+
+}
+
+function stopIdleFade(){
+
+idleStopped=true;
+
+if(idleTimer){
+clearInterval(idleTimer);
+idleTimer=null;
+}
+
+document.getElementById('playerName')
+.classList.remove('fading');
+
+}
+
+/* HELPERS */
+
+function escapeHtml(s){
+return String(s).replace(/[&<>"']/g,function(c){
+return {
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
+}[c];
+});
+}
+
+function clearPlayerUI(){
+
+document.getElementById('stats').innerHTML='';
+document.getElementById('profileBar').innerHTML='';
+document.getElementById('rankBadge').innerHTML='';
+document.getElementById('error').innerText='';
+document.getElementById('loading').innerText='';
+
+}
+
+/* Sets the display name and runs the shine sweep once. The name
+   itself stays default white - the rank colour is carried by the
+   badge beside it, not by the name. */
+
+function showName(text){
+
+const wrap=document.getElementById('nameWrap');
+const el=document.getElementById('playerName');
+
+stopIdleFade();
+
+el.innerText=text;
+
+/* the sweep clips to its own glyphs, so it carries the same text */
+document.getElementById('nameSweep').innerText=text;
+
+wrap.classList.remove('shine');
+void wrap.offsetWidth;
+wrap.classList.add('shine');
+
+}
+
+/* SERVER SWITCH */
+
+function setServer(server){
+
+if(currentServer===server){
+return;
+}
+
+currentServer=server;
+
+document.body.setAttribute('data-server',server);
+
+const t=themes[server];
+
+document.body.style.setProperty('--glow',t.glow);
+document.body.style.setProperty('--accent',t.accent);
+document.body.style.setProperty('--accent2',t.accent2);
+
+document.getElementById('server-donut')
+.classList.toggle('active',server==='donut');
+
+document.getElementById('server-hypixel')
+.classList.toggle('active',server==='hypixel');
+
+clearPlayerUI();
+
+document.getElementById('nameWrap')
+.classList.remove('shine');
+
+document.getElementById('playerName')
+.style.removeProperty('color');
+
+document.getElementById('nameSweep').innerText='';
+
+startIdleFade(server==='hypixel'?1:0);
+
+document.getElementById('username').placeholder=
+server==='hypixel'
+? 'Search Hypixel SkyBlock username...'
+: 'Search Minecraft username...';
+
+}
+
+/* RANK + SHIMMER */
+
+function renderRank(rank){
+
+const color=(rank && rank.color) ? rank.color : '#c8c8c8';
+
+const label=(rank && rank.name && rank.name!=='NONE')
+? rank.name
+: 'DEFAULT';
+
+/* Rendered the way Hypixel writes it in chat: [MVP] */
+
+document.getElementById('rankBadge').innerHTML=
+'<div class="rank-badge" style="color:'+
+escapeHtml(color)+'">['+
+escapeHtml(label)+']</div>';
+
+}
+
+/* BEST PROFILE SCORING */
+
+function profileScore(m,prof){
+
+if(!m){
+return -1;
+}
+
+const skillAvg=(m.skills && typeof m.skills.average==='number')
+? m.skills.average
+: 0;
+
+const slayerXp=(m.slayers && m.slayers.xp) || 0;
+
+const purse=Math.max(0,m.purse||0);
+
+const souls=(m.fairySouls && m.fairySouls.total) || 0;
+
+const minions=(prof && prof.minionCount) || 0;
+
+const zones=(m.zones||[])
+.filter(function(z){return z.visited}).length;
+
+const soulsMax=(m.fairySouls && m.fairySouls.max) || 0;
+
+const minionsMax=(prof && prof.maxUniqueMinions) || 0;
+
+const zonesMax=(m.zones||[]).length;
+
+/* Each dimension is normalised before weighting so no single
+   stat can run away with the score. Slayer XP and coins span
+   many orders of magnitude, so they use a log scale; skill
+   average is already a 0-60 figure; the rest are ratios. */
+
+const ratio=function(v,max){
+return max>0 ? Math.min(1,v/max) : 0;
+};
+
+return (skillAvg*100)+
+(Math.log10(slayerXp+1)*420)+
+(Math.log10(purse+1)*200)+
+(ratio(souls,soulsMax)*500)+
+(ratio(minions,minionsMax)*400)+
+(ratio(zones,zonesMax)*300);
+
+}
+
+/* FETCH ROUTER */
+
+function fetchStats(){
+
+if(currentServer==='hypixel'){
+return fetchHypixel();
+}
+
+return fetchDonut();
+
+}
+
+/* HYPIXEL */
+
+async function fetchHypixel(){
+
+const username=document
+.getElementById('username')
+.value.trim();
+
+const loading=document.getElementById('loading');
+const error=document.getElementById('error');
+
+if(!username){
+error.innerText='Enter username';
+return;
+}
+
+clearPlayerUI();
+
+loading.innerText='Loading Hypixel stats...';
+
+try{
+
+const res=await fetch(
+HY_API+'/player/'+encodeURIComponent(username)
+);
+
+if(!res.ok){
+throw new Error('http '+res.status);
+}
+
+const data=await res.json();
+
+/* the API answers 200 with {"error":true} for unknown players */
+if(!data || data.error || !data.player){
+loading.innerText='';
+error.innerText='Player not found';
+return;
+}
+
+const p=data.player;
+
+showName(p.username);
+
+document.getElementById('skin')
+.src='https://vzge.me/bust/'+
+encodeURIComponent(p.uuid || p.username)+
+'.png?autocrop';
+
+renderRank(p.rank);
+
+const profiles=p.profiles || [];
+
+if(!profiles.length){
+loading.innerText='';
+error.innerText='No SkyBlock profiles found';
+return;
+}
+
+loading.innerText='Comparing '+profiles.length+
+' profile'+(profiles.length===1?'':'s')+'...';
+
+const loaded=await Promise.all(
+profiles.map(function(pr){
+
+return fetch(
+HY_API+'/player/'+
+encodeURIComponent(p.username)+'/'+
+encodeURIComponent(pr.name)
+)
+.then(function(r){
+return r.ok ? r.json() : null;
+})
+.then(function(d){
+
+if(!d || d.error || !d.member){
+return null;
+}
+
+return {
+name:pr.name,
+member:d.member,
+profile:d.profile||{},
+score:profileScore(d.member,d.profile||{})
+};
+
+})
+.catch(function(){
+return null;
+});
+
+})
+);
+
+const usable=loaded.filter(Boolean);
+
+if(!usable.length){
+loading.innerText='';
+error.innerText='No readable profile data';
+return;
+}
+
+usable.sort(function(a,b){
+return b.score-a.score;
+});
+
+const best=usable[0];
+
+loading.innerText='';
+
+renderBestProfile(best);
+
+renderHypixelStats(best);
+
+}catch(err){
+
+loading.innerText='';
+error.innerText='Failed to fetch Hypixel API';
+console.log(err);
+
+}
+
+}
+
+function renderBestProfile(best){
+
+const mode=best.profile.mode;
+
+document.getElementById('profileBar').innerHTML=
+
+'<div class="profile-meta">'+
+'<span class="cap">Profile</span>'+
+'<span class="pname">'+escapeHtml(best.name)+'</span>'+
+(mode && mode!=='normal'
+? '<span class="mode">'+escapeHtml(mode.toUpperCase())+'</span>'
+: '')+
+'</div>';
+
+}
+
+/* STAT READERS */
+
+function statValue(list,rawName){
+
+if(!list){
+return 0;
+}
+
+for(let i=0;i<list.length;i++){
+if(list[i].rawName===rawName){
+return list[i].value;
+}
+}
+
+return 0;
+
+}
+
+function achAmount(ach,id){
+
+if(!ach || !ach.tiered){
+return 0;
+}
+
+for(let i=0;i<ach.tiered.length;i++){
+if(ach.tiered[i].id===id){
+return ach.tiered[i].amount||0;
+}
+}
+
+return 0;
+
+}
+
+/* The API can report a count above its own maximum (extra fairy
+   souls from events, minion slots beyond the listed cap). Show
+   the real total but never a fraction that reads as impossible. */
+
+function capped(value,max){
+
+const v=Math.max(0,Math.floor(value||0));
+const t=Math.max(0,Math.floor(max||0));
+
+const shown=(t>0 && v>t) ? t : v;
+
+return shorten(shown)+'<small>/'+shorten(t)+'</small>';
+
+}
+
+/* GEAR RENDERING */
+
+/* Minecraft colour codes -> hex, used to tint the rarity ring
+   from the item's own display name. */
+
+const mcColors={
+'0':'#000000','1':'#0000aa','2':'#00aa00','3':'#00aaaa',
+'4':'#aa0000','5':'#aa00aa','6':'#ffaa00','7':'#aaaaaa',
+'8':'#555555','9':'#5555ff','a':'#55ff55','b':'#55ffff',
+'c':'#ff5555','d':'#ff55ff','e':'#ffff55','f':'#ffffff'
+};
+
+/* Strips the §-codes Hypixel embeds in display names. */
+
+function stripMc(s){
+return String(s||'').replace(/§./g,'');
+}
+
+/* Rarity tint. Hypixel names can open with a formatting code
+   (§l bold, §k obfuscated) before the colour, and the rarity is
+   restated in the last lore line - which is the more reliable
+   source, so it wins when present. */
+
+function nameColor(it){
+
+const lore=(it.display && it.display.lore) || [];
+
+for(let i=lore.length-1;i>=0;i--){
+
+const line=lore[i];
+
+if(/COMMON|UNCOMMON|RARE|EPIC|LEGENDARY|MYTHIC|DIVINE|SPECIAL/i.test(stripMc(line))){
+
+const c=String(line).match(/§([0-9a-f])/i);
+
+if(c){
+return mcColors[c[1].toLowerCase()];
+}
+
+}
+
+}
+
+const m=String((it.display && it.display.name)||'')
+.match(/§([0-9a-f])/i);
+
+return m ? mcColors[m[1].toLowerCase()] : '#cfcfcf';
+
+}
+
+/* Item texture: SkyBlock ids resolve through the item API;
+   custom heads (pets, orbs, some helmets) carry a skin hash.
+   Ids with a damage suffix (STAINED_CLAY:9) have no entry, so
+   the suffix is dropped to hit the base item. */
+
+function itemImage(it){
+
+/* Head items (goggles, pet skins, orbs) carry a skin hash.
+   textures.minecraft.net serves the flat 64x64 skin sheet, which
+   reads as a dark smear in a 64px slot - this endpoint returns a
+   rendered head instead, from the same host as the item art. */
+
+if(it.headTexture){
+return 'https://sky.shiiyu.moe/api/head/'+
+encodeURIComponent(it.headTexture);
+}
+
+const id=String(it.id||'').split(':')[0];
+
+return 'https://sky.shiiyu.moe/api/item/'+
+encodeURIComponent(id);
+
+}
+
+/* Plain-text tooltip: name plus the stat lines from the lore. */
+
+function itemTitle(it){
+
+const name=stripMc(it.display && it.display.name)||it.id;
+
+const lore=(it.display && it.display.lore)
+? it.display.lore.map(stripMc).filter(function(l){
+return l.trim().length;
+}).slice(0,12).join('\n')
+: '';
+
+return lore ? name+'\n\n'+lore : name;
+
+}
+
+function slotHtml(it){
+
+if(!it){
+return '<div class="slot empty"></div>';
+}
+
+const rar=nameColor(it);
+
+return '<div class="slot filled" style="--rar:'+
+escapeHtml(rar)+'" title="'+
+escapeHtml(itemTitle(it))+'">'+
+'<img src="'+escapeHtml(itemImage(it))+
+'" alt="'+escapeHtml(stripMc(it.display&&it.display.name)||it.id)+
+'" loading="lazy" onerror="this.style.visibility=\'hidden\'">'+
+(it.count>1
+? '<span class="qty">'+it.count+'</span>'
+: '')+
+'</div>';
+
+}
+
+function panel(title,items,note,padTo){
+
+const list=(items||[]).slice();
+
+/* keep fixed-size layouts (armor is always 4 slots) aligned */
+if(padTo){
+while(list.length<padTo){
+list.push(null);
+}
+}
+
+const filled=list.filter(Boolean).length;
+
+if(!filled && !note){
+return '';
+}
+
+return '<div class="panel">'+
+'<div class="panel-head">'+escapeHtml(title)+
+'<span class="count">'+filled+' item'+
+(filled===1?'':'s')+'</span>'+
+'</div>'+
+'<div class="slots">'+
+list.map(slotHtml).join('')+
+'</div>'+
+(note?'<div class="gear-note">'+escapeHtml(note)+'</div>':'')+
+'</div>';
+
+}
+
+/* The API already returns armor helmet-first, matching how the
+   in-game screen reads, so the order is kept as given and only
+   padded out to the full four slots. */
+
+function orderedArmor(armor){
+
+const a=(armor||[]).slice();
+
+while(a.length<4){
+a.push(null);
+}
+
+return a.slice(0,4);
+
+}
+
+/* Weapons are identified by vanilla item id: swords, bows,
+   rods and the axes SkyBlock uses as weapons. */
+
+const weaponVanilla={
+'267':1,'268':1,'272':1,'276':1,'283':1,  /* swords */
+'261':1,                                  /* bows */
+'271':1,'275':1,'279':1,'286':1,          /* axes */
+'346':1                                   /* rods */
+};
+
+function isWeapon(it){
+
+if(!it){
+return false;
+}
+
+const vid=String(it.vanillaId||'').split(':')[0];
+
+return !!weaponVanilla[vid];
+
+}
+
+function card(iconKey,label,cls,value,sub,extra){
+
+return '<div class="card">'+
+'<div class="label '+cls+'">'+
+'<img src="'+hyIcons[iconKey]+'" alt="">'+
+label+
+'</div>'+
+'<div class="value '+cls+'">'+value+'</div>'+
+(extra||'')+
+(sub?'<div class="sub">'+escapeHtml(sub)+'</div>':'')+
+'</div>';
+
+}
+
+function renderHypixelStats(best){
+
+const m=best.member;
+const prof=best.profile||{};
+
+const skills=(m.skills && m.skills.list)||[];
+
+const zonesVisited=(m.zones||[])
+.filter(function(z){return z.visited}).length;
+
+const zonesTotal=(m.zones||[]).length;
+
+const questsDone=(m.objectives||[])
+.filter(function(o){return o.completed}).length;
+
+const questsTotal=(m.objectives||[]).length;
+
+const souls=m.fairySouls||{};
+const slayers=m.slayers||{};
+
+let html='';
+
+html+='<div class="section-title">Overview</div>';
+
+html+=card('purse','Purse','money',
+'$'+shorten(Math.floor(m.purse||0)),null);
+
+html+=card('skillavg','Skill Average','skillavg',
+(m.skills && typeof m.skills.average==='number'
+? m.skills.average.toFixed(2)
+: '0'),
+(m.skills && m.skills.apiEnabled===false)
+? 'Skills API off - may be stale'
+: null);
+
+html+=card('slayer','Slayer XP','slayer',
+shorten(slayers.xp||0),
+(slayers.kills||0)+' boss kills');
+
+html+=card('souls','Fairy Souls','souls',
+capped(souls.total,souls.max),
+(souls.exchanges||0)+' exchanges');
+
+html+=card('kills','Kills','kills',
+shorten(statValue(m.stats,'kills')),null);
+
+html+=card('deaths','Deaths','deaths',
+shorten(statValue(m.stats,'deaths')),null);
+
+html+=card('minions','Minion Slots','minions',
+capped(prof.minionCount,prof.maxUniqueMinions),
+'unique minions crafted');
+
+html+=card('zones','Zones Found','zones',
+capped(zonesVisited,zonesTotal),null);
+
+html+=card('quests','Objectives','quests',
+capped(questsDone,questsTotal),null);
+
+html+=card('secrets','Dungeon Secrets','secrets',
+shorten(achAmount(m.achievements,'treasure_hunter')),null);
+
+/* GEAR */
+
+const inv=m.inventories||{};
+
+const hasInv=Object.keys(inv).length>0;
+
+const armor=orderedArmor(inv.armor);
+
+const backpack=(inv.inventory||[]);
+
+const weapons=backpack.filter(isWeapon);
+
+if(hasInv){
+
+html+='<div class="section-title">Gear</div>';
+
+html+=panel('Armor',armor,null,4);
+
+/* The stats API exposes no equipment slot (necklace / cloak /
+   belt / gloves), so it is reported rather than faked. */
+html+='<div class="panel">'+
+'<div class="panel-head">Equipment'+
+'<span class="count">not in API</span>'+
+'</div>'+
+'<div class="slots">'+
+[null,null,null,null].map(slotHtml).join('')+
+'</div>'+
+'<div class="gear-note">'+
+'This API does not return the equipment slots '+
+'(necklace, cloak, belt, gloves).'+
+'</div>'+
+'</div>';
+
+if(weapons.length){
+html+=panel('Weapons',weapons,null,0);
+}
+
+if(backpack.filter(Boolean).length){
+html+=panel('Inventory',backpack,null,0);
+}
+
+if((inv.accessory_bag||[]).filter(Boolean).length){
+html+=panel('Accessory Bag',inv.accessory_bag,null,0);
+}
+
+if((inv.ender_chest||[]).filter(Boolean).length){
+html+=panel('Ender Chest',inv.ender_chest,null,0);
+}
+
+if((inv.wardrobe||[]).filter(Boolean).length){
+html+=panel('Wardrobe',inv.wardrobe,null,0);
 }
 
 }else{
 
-element.innerText=
-current.substring(0,charIndex--);
+html+='<div class="section-title">Gear</div>';
 
-if(charIndex<0){
+html+='<div class="panel">'+
+'<div class="panel-head">Armor &amp; Inventory'+
+'<span class="count">hidden</span>'+
+'</div>'+
+'<div class="slots">'+
+[null,null,null,null].map(slotHtml).join('')+
+'</div>'+
+'<div class="gear-note">'+
+'This player has the inventory API disabled '+
+'in their SkyBlock settings, so no items are returned.'+
+'</div>'+
+'</div>';
 
-deleting=false;
+}
 
-typingIndex=
-(typingIndex+1)%typingWords.length;
+if(skills.length){
+
+html+='<div class="section-title">Skills</div>';
+
+for(let i=0;i<skills.length;i++){
+
+const s=skills[i];
+
+const maxed=s.level>=s.maxLevel;
+
+const pct=maxed
+? 100
+: (s.levelXpRequired>0
+? Math.min(100,(s.levelXp/s.levelXpRequired)*100)
+: 0);
+
+const name=s.id.charAt(0).toUpperCase()+
+s.id.slice(1).replace(/_/g,' ');
+
+const bar='<div class="bar'+(maxed?' gold':'')+
+'"><i style="width:'+pct.toFixed(1)+'%"></i></div>';
+
+html+='<div class="card">'+
+'<div class="label '+s.id+'">'+
+'<img src="'+(hyIcons[s.id]||hyIcons.skillavg)+'" alt="">'+
+escapeHtml(name)+
+'</div>'+
+'<div class="value '+s.id+'">'+
+Math.min(s.level,s.maxLevel)+
+'<small>/'+s.maxLevel+'</small>'+
+'</div>'+
+bar+
+'<div class="sub">'+
+(maxed?'MAXED - ':'')+
+shorten(s.xp)+' XP'+
+'</div>'+
+'</div>';
 
 }
 
 }
 
-setTimeout(
-typingEffect,
-deleting ? 45 : 90
+document.getElementById('stats').innerHTML=html;
+
+}
+
+/* DONUTSMP */
+
+/* Pulls the stat pairs out of the page's schema.org block. The
+   markup is parsed rather than regexed so a change in attribute
+   order or whitespace does not silently break it. Returns null
+   when the player has no stats (the 404 page carries no block). */
+
+function donutStatsFromPage(page){
+
+let doc;
+
+try{
+doc=new DOMParser().parseFromString(page,'text/html');
+}catch(e){
+return null;
+}
+
+const blocks=doc.querySelectorAll(
+'script[type="application/ld+json"]'
 );
 
+for(let i=0;i<blocks.length;i++){
+
+let json;
+
+try{
+json=JSON.parse(blocks[i].textContent);
+}catch(e){
+continue;
 }
 
-/* FETCH */
+const graph=json['@graph']||[json];
 
-async function fetchStats(){
+for(let j=0;j<graph.length;j++){
+
+const entity=graph[j] && graph[j].mainEntity;
+
+const props=entity && entity.additionalProperty;
+
+if(!props || !props.length){
+continue;
+}
+
+const out={};
+
+for(let k=0;k<props.length;k++){
+
+if(props[k] && props[k].name){
+out[props[k].name]=props[k].value;
+}
+
+}
+
+if(Object.keys(out).length){
+return out;
+}
+
+}
+
+}
+
+return null;
+
+}
+
+async function fetchDonut(){
 
 const username=document
 .getElementById('username')
@@ -692,53 +2099,59 @@ return;
 
 }
 
+clearPlayerUI();
+
 loading.innerText='Loading stats...';
-
-error.innerText='';
-
-stats.innerHTML='';
 
 try{
 
-const api=
-'https://donutstats.co/api.php?path=%2Fstats%2F'
-+encodeURIComponent(username);
+/* donutstats.net is a Next.js page behind Cloudflare, so it can
+   be neither fetched directly (no CORS) nor scraped server-side
+   (Turnstile returns 403). It does embed a schema.org JSON-LD
+   block carrying every stat as a name/value pair, which is
+   stable markup, so the page is read through a text proxy and
+   that block is parsed. Unknown players 404 with no JSON-LD. */
+
+const target=
+'https://www.donutstats.net/player/'+
+encodeURIComponent(username)+
+'?ref=player-stats';
 
 let response;
 
 try{
 
-response=await fetch(api);
-
-if(!response.ok){
-throw new Error();
-}
+response=await fetch(
+'https://r.jina.ai/'+target,
+{ headers:{ 'x-respond-with':'html' } }
+);
 
 }catch(e){
 
-response=await fetch(
-'https://corsproxy.io/?'+
-encodeURIComponent(api)
-);
-
-}
-
-const data=await response.json();
-
 loading.innerText='';
-
-if(!data || !data.result){
-
-error.innerText='Player not found';
+error.innerText='Could not reach the DonutSMP stats source.';
 return;
 
 }
 
-const s=data.result;
+const page=await response.text();
+
+loading.innerText='';
+
+const s=donutStatsFromPage(page);
+
+if(!s){
+
+error.innerText='No DonutSMP stats found for that player.';
+return;
+
+}
+
+showName(username);
 
 document.getElementById('skin')
 .src='https://vzge.me/bust/'+
-username+
+encodeURIComponent(username)+
 '.png?autocrop';
 
 const cards=[
@@ -764,7 +2177,9 @@ shorten(s.placed_blocks),'placed'],
 shorten(s.broken_blocks),'broken'],
 
 ['mobs_killed','Mobs Killed',
-shorten(s.mobs_killed),'mobs']
+shorten(s.mobs_killed),'mobs'],
+
+['kills','K/D',kd(s.kills,s.deaths),'kd']
 
 ];
 
@@ -780,13 +2195,13 @@ stats.innerHTML +=
 
 '<div class="label '+c[3]+'">'+
 
-'<img src="'+icons[c[0]]+'">'+
+'<img src="'+icons[c[0]]+'" alt="">'+
 
 c[1]+
 
 '</div>'+
 
-'<div class="value">'+
+'<div class="value '+c[3]+'">'+
 
 c[2]+
 
@@ -810,14 +2225,14 @@ console.log(err);
 
 function shorten(num){
     if (num === null || num === undefined) return '0';
-    
+
     let cleanNum = String(num).replace(/,/g, '').trim();
     let n = parseFloat(cleanNum);
-    
+
     if (isNaN(n)) return '0';
-    
+
     let abs = Math.abs(n);
-    
+
     if(abs >= 1e12){
         return (n / 1e12).toFixed(1).replace(/\.0$/, '') + 'T';
     }
@@ -830,23 +2245,63 @@ function shorten(num){
     if(abs >= 1e3){
         return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
     }
-    
-    return n.toString();
+
+    return String(Math.round(n * 100) / 100);
 }
 
 function money(num){
     return '$' + shorten(num);
 }
 
-function playtime(ms){
-    if (!ms) return '0h 0m';
-    let sec=Math.floor(Number(ms)/1000);
-    let h=Math.floor(sec/3600);
-    let m=Math.floor((sec-h*3600)/60);
-    return h+'h '+m+'m'
+/* Kill/death ratio. With no deaths yet the ratio is undefined,
+   so the kill count is shown as-is rather than dividing by zero. */
+
+function kd(kills,deaths){
+
+const k=parseFloat(String(kills||0).replace(/,/g,''));
+const d=parseFloat(String(deaths||0).replace(/,/g,''));
+
+if(!isFinite(k)){
+return '0';
 }
 
-typingEffect();
+if(!d){
+return String(k);
+}
+
+return (k/d).toFixed(2);
+
+}
+
+/* Playtime arrives in milliseconds. Long totals read badly in
+   raw hours (1845h), so days are broken out the way the source
+   page shows it: 76d 22h. */
+
+function playtime(ms){
+
+const total=Math.floor(Number(ms)/1000);
+
+if(!isFinite(total) || total<=0){
+return '0m';
+}
+
+const d=Math.floor(total/86400);
+const h=Math.floor((total%86400)/3600);
+const m=Math.floor((total%3600)/60);
+
+if(d>0){
+return d+'d '+h+'h';
+}
+
+if(h>0){
+return h+'h '+m+'m';
+}
+
+return m+'m';
+
+}
+
+startIdleFade(0);
 
 document
 .getElementById('username')

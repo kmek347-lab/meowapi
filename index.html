@@ -10,7 +10,7 @@
 
 <style>
 
-/* Minecraft typeface for the rank badge */
+
 @font-face{
 font-family:'Minecraft';
 src:url('https://cdn.jsdelivr.net/gh/South-Paw/typeface-minecraft@master/files/minecraft.woff') format('woff');
@@ -30,8 +30,7 @@ min-height:100%;
 }
 
 body{
-/* --glow stays deliberately low-alpha for both servers: the
-   backdrop should read as dark, only tinted, never bright */
+
 --glow:rgba(0,102,255,.13);
 --accent:#0066ff;
 --accent2:#00a2ff;
@@ -42,7 +41,7 @@ color:white;
 overflow-x:hidden;
 }
 
-/* FULLSCREEN SHELL */
+
 
 .container{
 position:relative;
@@ -77,7 +76,7 @@ linear-gradient(
 transition:background .55s ease;
 }
 
-/* SERVERS */
+
 
 .server-select{
 display:flex;
@@ -143,8 +142,7 @@ transform:translateX(120%);
 width:32px;
 height:32px;
 
-/* logos have different aspect ratios - contain keeps them
-   undistorted inside a fixed square box */
+
 object-fit:contain;
 object-position:center;
 
@@ -168,7 +166,7 @@ background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-/* TOP */
+
 
 .top{
 display:flex;
@@ -206,7 +204,7 @@ min-height:82px;
 white-space:nowrap;
 }
 
-/* SERVER-NAME FADE (replaces the typewriter) */
+
 
 .name.fading{
 animation:nameFade 3.4s ease-in-out infinite;
@@ -234,13 +232,7 @@ transform:translateY(-6px) scale(.985);
 
 }
 
-/* NAME + SHINE SWEEP
-   Lunar's shine is a narrow white bar tilted -20deg that sweeps
-   across once. On a button it is clipped to the button's own box;
-   here there is no box, so the bar is clipped to the glyphs with
-   background-clip:text - the light travels over the letters and
-   nothing rectangular is ever drawn. The base sits a little below
-   pure white so the highlight has room to read against it. */
+
 
 .name-wrap{
 position:relative;
@@ -262,7 +254,7 @@ color:transparent;
 
 background-repeat:no-repeat;
 
-/* the bar itself: 75px wide, tilted, parked off to the left */
+
 background-image:
 linear-gradient(
 110deg,
@@ -288,11 +280,9 @@ from{ background-position:130% 0; }
 to{ background-position:-90% 0; }
 }
 
-/* RANK BADGE (Minecraft typeface) */
 
-/* No box: the rank reads as a coloured tag next to the name, the
-   way it does in chat. Colour alone carries it, so there is no
-   border or panel to sit slightly wrong against the name. */
+
+
 
 .rank-badge{
 display:inline-block;
@@ -308,7 +298,7 @@ white-space:nowrap;
 text-shadow:0 2px 0 rgba(0,0,0,.6);
 }
 
-/* SEARCH */
+
 
 .search-wrap{
 display:flex;
@@ -431,7 +421,7 @@ button:hover{
 transform:translateY(-2px);
 }
 
-/* SKIN */
+
 
 .skin{
 width:270px;
@@ -460,7 +450,7 @@ transform:translateY(0px);
 
 }
 
-/* ACTIVE PROFILE (sits inline under the search, understated) */
+
 
 .profile-bar{
 display:flex;
@@ -509,7 +499,7 @@ background:rgba(255,255,255,.08);
 color:#cfcfcf;
 }
 
-/* SECTION TITLE */
+
 
 .section-title{
 display:flex;
@@ -541,7 +531,7 @@ transparent
 );
 }
 
-/* GEAR PANELS (armor / equipment / weapons / inventory) */
+
 
 .panel{
 grid-column:1/-1;
@@ -645,7 +635,7 @@ color:#fff;
 text-shadow:1px 1px 0 rgba(0,0,0,.9);
 }
 
-/* rarity ring, driven by the item's own name colour */
+
 .slot.filled::after{
 content:'';
 
@@ -678,7 +668,7 @@ font-weight:600;
 color:#8b8b8b;
 }
 
-/* STATS */
+
 
 .stats{
 display:grid;
@@ -694,7 +684,7 @@ margin-top:38px;
 .card{
 position:relative;
 
-/* lets .value size itself against the card width (cqw) */
+
 container-type:inline-size;
 
 padding:28px;
@@ -762,20 +752,16 @@ height:26px;
 object-fit:contain;
 }
 
-/* clamp() keeps long values ("696.5K", "76d 22h") on one line in
-   a narrow card instead of breaking mid-token, which is what
-   word-break:break-word did - it split "696.5K" into "696.5 K". */
+
 
 .value{
-/* cqw scales with the card, not the viewport, so a wide value
-   fits at any window size instead of only the narrow ones */
+
 font-size:clamp(24px,17cqw,52px);
 font-weight:800;
 letter-spacing:-1.5px;
 line-height:1.05;
 
-/* one line, scaled down if the value is wide ("76d 22h") rather
-   than broken mid-token the way word-break:break-word did */
+
 white-space:nowrap;
 
 overflow-wrap:normal;
@@ -835,7 +821,37 @@ linear-gradient(
 );
 }
 
-/* COLORS */
+
+
+.brand{
+position:fixed;
+top:18px;
+right:22px;
+z-index:50;
+font-size:12px;
+font-weight:700;
+letter-spacing:.12em;
+text-transform:uppercase;
+color:var(--accent2,#00a2ff);
+opacity:.55;
+pointer-events:none;
+user-select:none;
+transition:opacity .3s ease,color .3s ease;
+}
+
+.brand:hover{
+opacity:.8;
+}
+
+@media (max-width:640px){
+.brand{
+top:12px;
+right:14px;
+font-size:10px;
+}
+}
+
+
 
 .money{color:#e8bc42}
 .shards{color:#9f72ff}
@@ -846,6 +862,7 @@ linear-gradient(
 .broken{color:#e28a46}
 .mobs{color:#47dfaa}
 
+.networth{color:#3ddc84}
 .skillavg{color:#ffd76a}
 .slayer{color:#ff8a5c}
 .souls{color:#7ce7ff}
@@ -878,7 +895,7 @@ font-weight:500;
 color:#ff6b6b;
 }
 
-/* MOBILE */
+
 
 @media(max-width:900px){
 
@@ -1019,6 +1036,8 @@ font-size:15px;
 
 <body data-server="donut">
 
+<div class="brand">AntrixStats</div>
+
 <div class="container">
 
 <div class="hero">
@@ -1137,9 +1156,11 @@ kd:'https://minecraft.wiki/images/Enchanted_Netherite_Sword.gif?a1a02&format=ori
 
 };
 
-/* HYPIXEL ICONS */
+
 
 const hyIcons={
+
+networth:'https://minecraft.wiki/images/Emerald_JE3_BE3.png',
 
 purse:'https://ccvaults.com/assets/10.%20Items/11.%20Materials/Gold_Ingot.png',
 
@@ -1187,11 +1208,9 @@ hunting:'https://minecraft.wiki/images/Bow_JE2_BE1.png'
 
 };
 
-/* THEMES */
 
-/* Both servers share one background: the same blue --glow, so
-   switching to Hypixel does not tint the page orange. Only the
-   accents (buttons, headings, stat values) carry the server hue. */
+
+
 
 const SHARED_GLOW='rgba(0,102,255,.13)';
 
@@ -1203,11 +1222,7 @@ accent:'#0066ff',
 accent2:'#00a2ff'
 },
 
-/* Hypixel reuses the DonutSMP palette outright. Orange is
-   intrinsically brighter than blue at the same saturation
-   (#ff8a00 reads ~153 luminance against #0066ff at ~91), so any
-   orange accent lit the view up next to the DonutSMP one. Same
-   colours means the two views are identical, not just close. */
+
 
 hypixel:{
 glow:SHARED_GLOW,
@@ -1221,9 +1236,7 @@ const HY_API='https://statsapi.tem.cx';
 
 let currentServer='donut';
 
-/* SERVER-NAME FADE CYCLE
-   Each word blurs in, holds, then blurs out. The swap happens
-   while the text is invisible, so it never appears to jump. */
+
 
 const idleWords=[
 'DonutSMP',
@@ -1254,7 +1267,7 @@ idleTimer=null;
 el.innerText=idleWords[idleIndex];
 el.style.removeProperty('color');
 
-/* restart the CSS animation cleanly */
+
 el.classList.remove('fading');
 void el.offsetWidth;
 el.classList.add('fading');
@@ -1287,7 +1300,7 @@ document.getElementById('playerName')
 
 }
 
-/* HELPERS */
+
 
 function escapeHtml(s){
 return String(s).replace(/[&<>"']/g,function(c){
@@ -1311,9 +1324,7 @@ document.getElementById('loading').innerText='';
 
 }
 
-/* Sets the display name and runs the shine sweep once. The name
-   itself stays default white - the rank colour is carried by the
-   badge beside it, not by the name. */
+
 
 function showName(text){
 
@@ -1324,7 +1335,7 @@ stopIdleFade();
 
 el.innerText=text;
 
-/* the sweep clips to its own glyphs, so it carries the same text */
+
 document.getElementById('nameSweep').innerText=text;
 
 wrap.classList.remove('shine');
@@ -1333,7 +1344,7 @@ wrap.classList.add('shine');
 
 }
 
-/* SERVER SWITCH */
+
 
 function setServer(server){
 
@@ -1376,7 +1387,7 @@ server==='hypixel'
 
 }
 
-/* RANK + SHIMMER */
+
 
 function renderRank(rank){
 
@@ -1386,7 +1397,7 @@ const label=(rank && rank.name && rank.name!=='NONE')
 ? rank.name
 : 'DEFAULT';
 
-/* Rendered the way Hypixel writes it in chat: [MVP] */
+
 
 document.getElementById('rankBadge').innerHTML=
 '<div class="rank-badge" style="color:'+
@@ -1395,7 +1406,7 @@ escapeHtml(label)+']</div>';
 
 }
 
-/* BEST PROFILE SCORING */
+
 
 function profileScore(m,prof){
 
@@ -1424,10 +1435,7 @@ const minionsMax=(prof && prof.maxUniqueMinions) || 0;
 
 const zonesMax=(m.zones||[]).length;
 
-/* Each dimension is normalised before weighting so no single
-   stat can run away with the score. Slayer XP and coins span
-   many orders of magnitude, so they use a log scale; skill
-   average is already a 0-60 figure; the rest are ratios. */
+
 
 const ratio=function(v,max){
 return max>0 ? Math.min(1,v/max) : 0;
@@ -1442,7 +1450,247 @@ return (skillAvg*100)+
 
 }
 
-/* FETCH ROUTER */
+
+
+const PRIZM_SUMMARY='https://skyprizm.com/api/profile-summary';
+const PRIZM_FULL='https://skyprizm.com/api/skyblock-profile?ign=';
+
+const ELITE_NW='https://api.elitebot.dev/profile/{p}/{s}/networth';
+
+
+
+const POST_PROXIES=[
+function(u){ return 'https://proxy.cors.sh/'+u; }
+];
+
+
+
+const GET_PROXIES=[
+function(u){ return 'https://proxy.cors.sh/'+u; },
+function(u){ return 'https://api.allorigins.win/raw?url='+
+encodeURIComponent(u); }
+];
+
+
+
+function fetchPrizmNetworth(ign){
+
+if(!ign){
+return Promise.resolve(null);
+}
+
+const payload=JSON.stringify({ign:ign});
+
+
+
+function viaSummary(i){
+
+if(i>=POST_PROXIES.length){
+return viaFull(0);
+}
+
+return fetch(POST_PROXIES[i](PRIZM_SUMMARY),{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:payload
+})
+.then(function(r){
+return r.ok ? r.json() : null;
+})
+.then(function(j){
+const nw=j && j.summary && j.summary.networth;
+if(typeof nw==='number' && nw>0){
+return nw;
+}
+return viaSummary(i+1);
+})
+.catch(function(){
+return viaSummary(i+1);
+});
+
+}
+
+
+
+function viaFull(i){
+
+if(i>=GET_PROXIES.length){
+return null;
+}
+
+const target=PRIZM_FULL+encodeURIComponent(ign);
+
+return fetch(GET_PROXIES[i](target))
+.then(function(r){
+return r.ok ? r.json() : null;
+})
+.then(function(j){
+const nw=j && j.skycryptNetworth;
+if(typeof nw==='number' && nw>0){
+return nw;
+}
+return viaFull(i+1);
+})
+.catch(function(){
+return viaFull(i+1);
+});
+
+}
+
+return viaSummary(0);
+
+}
+
+
+
+function fetchEliteNetworth(playerUuid,profileUuid){
+
+if(!playerUuid || !profileUuid){
+return Promise.resolve(null);
+}
+
+const target=ELITE_NW
+.replace('{p}',playerUuid)
+.replace('{s}',profileUuid);
+
+function attempt(i){
+
+if(i>=GET_PROXIES.length){
+return null;
+}
+
+return fetch(GET_PROXIES[i](target))
+.then(function(r){
+return r.ok ? r.json() : null;
+})
+.then(function(j){
+if(!j || typeof j.networth!=='number'){
+return attempt(i+1);
+}
+
+if(j.noInventory && j.networth===0){
+return null;
+}
+return j.networth;
+})
+.catch(function(){
+return attempt(i+1);
+});
+
+}
+
+return attempt(0);
+
+}
+
+
+
+const PRICES_URL='https://raw.githubusercontent.com/'+
+'SkyHelperBot/Prices/main/prices.json';
+
+
+
+const nwCats=['armor','equipment','inventory','accessory_bag',
+'ender_chest','wardrobe','personal_vault','fishing_bag'];
+
+let priceCache=null;
+
+function fetchPrices(){
+
+if(priceCache){
+return Promise.resolve(priceCache);
+}
+
+return fetch(PRICES_URL)
+.then(function(r){
+return r.ok ? r.json() : null;
+})
+.then(function(j){
+priceCache=j;
+return j;
+})
+.catch(function(){
+return null;
+});
+
+}
+
+
+
+function itemValue(it,prices){
+
+if(!it){
+return 0;
+}
+
+const id=String(it.id||'').toLowerCase();
+
+if(!id){
+return 0;
+}
+
+let unit=prices[id]||0;
+
+
+
+const ench=it.enchantments||{};
+
+for(const name in ench){
+if(Object.prototype.hasOwnProperty.call(ench,name)){
+const key='enchantment_'+String(name).toLowerCase()+'_'+
+parseInt(ench[name],10);
+unit+=prices[key]||0;
+}
+}
+
+if(it.recombobulated){
+unit+=prices['recombobulator_3000']||0;
+}
+
+const count=(it.count>0)?it.count:1;
+
+return unit*count;
+
+}
+
+function computeNetworth(m,prices){
+
+if(!m || !prices){
+return null;
+}
+
+let total=Math.max(0,m.purse||0);
+
+const inv=m.inventories||{};
+
+for(let i=0;i<nwCats.length;i++){
+const items=inv[nwCats[i]]||[];
+for(let j=0;j<items.length;j++){
+total+=itemValue(items[j],prices);
+}
+}
+
+
+
+const pets=(m.pets && m.pets.list)||[];
+
+for(let i=0;i<pets.length;i++){
+const pet=pets[i];
+if(!pet){
+continue;
+}
+let key=String(pet.type||'').toLowerCase();
+if(pet.tier){
+key+=';'+String(pet.tier).toLowerCase();
+}
+total+=prices[key]||0;
+}
+
+return total;
+
+}
+
+
 
 function fetchStats(){
 
@@ -1454,7 +1702,7 @@ return fetchDonut();
 
 }
 
-/* HYPIXEL */
+
 
 async function fetchHypixel(){
 
@@ -1486,7 +1734,7 @@ throw new Error('http '+res.status);
 
 const data=await res.json();
 
-/* the API answers 200 with {"error":true} for unknown players */
+
 if(!data || data.error || !data.player){
 loading.innerText='';
 error.innerText='Player not found';
@@ -1515,6 +1763,9 @@ return;
 loading.innerText='Comparing '+profiles.length+
 ' profile'+(profiles.length===1?'':'s')+'...';
 
+
+const pricesPromise=fetchPrices();
+
 const loaded=await Promise.all(
 profiles.map(function(pr){
 
@@ -1534,6 +1785,7 @@ return null;
 
 return {
 name:pr.name,
+uuid:pr.uuid,
 member:d.member,
 profile:d.profile||{},
 score:profileScore(d.member,d.profile||{})
@@ -1560,6 +1812,22 @@ return b.score-a.score;
 });
 
 const best=usable[0];
+
+
+
+let exact=await fetchPrizmNetworth(p.username);
+
+if(exact===null || exact===undefined){
+exact=await fetchEliteNetworth(p.uuid,best.uuid);
+}
+
+if(exact!==null && exact!==undefined){
+best.networth=exact;
+best.nwExact=true;
+}else{
+best.networth=computeNetworth(best.member,await pricesPromise);
+best.nwExact=false;
+}
 
 loading.innerText='';
 
@@ -1593,7 +1861,7 @@ document.getElementById('profileBar').innerHTML=
 
 }
 
-/* STAT READERS */
+
 
 function statValue(list,rawName){
 
@@ -1627,9 +1895,7 @@ return 0;
 
 }
 
-/* The API can report a count above its own maximum (extra fairy
-   souls from events, minion slots beyond the listed cap). Show
-   the real total but never a fraction that reads as impossible. */
+
 
 function capped(value,max){
 
@@ -1642,10 +1908,9 @@ return shorten(shown)+'<small>/'+shorten(t)+'</small>';
 
 }
 
-/* GEAR RENDERING */
 
-/* Minecraft colour codes -> hex, used to tint the rarity ring
-   from the item's own display name. */
+
+
 
 const mcColors={
 '0':'#000000','1':'#0000aa','2':'#00aa00','3':'#00aaaa',
@@ -1654,16 +1919,13 @@ const mcColors={
 'c':'#ff5555','d':'#ff55ff','e':'#ffff55','f':'#ffffff'
 };
 
-/* Strips the §-codes Hypixel embeds in display names. */
+
 
 function stripMc(s){
 return String(s||'').replace(/§./g,'');
 }
 
-/* Rarity tint. Hypixel names can open with a formatting code
-   (§l bold, §k obfuscated) before the colour, and the rarity is
-   restated in the last lore line - which is the more reliable
-   source, so it wins when present. */
+
 
 function nameColor(it){
 
@@ -1692,17 +1954,11 @@ return m ? mcColors[m[1].toLowerCase()] : '#cfcfcf';
 
 }
 
-/* Item texture: SkyBlock ids resolve through the item API;
-   custom heads (pets, orbs, some helmets) carry a skin hash.
-   Ids with a damage suffix (STAINED_CLAY:9) have no entry, so
-   the suffix is dropped to hit the base item. */
+
 
 function itemImage(it){
 
-/* Head items (goggles, pet skins, orbs) carry a skin hash.
-   textures.minecraft.net serves the flat 64x64 skin sheet, which
-   reads as a dark smear in a 64px slot - this endpoint returns a
-   rendered head instead, from the same host as the item art. */
+
 
 if(it.headTexture){
 return 'https://sky.shiiyu.moe/api/head/'+
@@ -1716,7 +1972,7 @@ encodeURIComponent(id);
 
 }
 
-/* Plain-text tooltip: name plus the stat lines from the lore. */
+
 
 function itemTitle(it){
 
@@ -1757,7 +2013,7 @@ function panel(title,items,note,padTo){
 
 const list=(items||[]).slice();
 
-/* keep fixed-size layouts (armor is always 4 slots) aligned */
+
 if(padTo){
 while(list.length<padTo){
 list.push(null);
@@ -1783,9 +2039,7 @@ list.map(slotHtml).join('')+
 
 }
 
-/* The API already returns armor helmet-first, matching how the
-   in-game screen reads, so the order is kept as given and only
-   padded out to the full four slots. */
+
 
 function orderedArmor(armor){
 
@@ -1799,14 +2053,13 @@ return a.slice(0,4);
 
 }
 
-/* Weapons are identified by vanilla item id: swords, bows,
-   rods and the axes SkyBlock uses as weapons. */
+
 
 const weaponVanilla={
-'267':1,'268':1,'272':1,'276':1,'283':1,  /* swords */
-'261':1,                                  /* bows */
-'271':1,'275':1,'279':1,'286':1,          /* axes */
-'346':1                                   /* rods */
+'267':1,'268':1,'272':1,'276':1,'283':1,  
+'261':1,                                  
+'271':1,'275':1,'279':1,'286':1,          
+'346':1                                   
 };
 
 function isWeapon(it){
@@ -1859,6 +2112,16 @@ let html='';
 
 html+='<div class="section-title">Overview</div>';
 
+const hasNw=(best.networth!==null && best.networth!==undefined);
+
+html+=card('networth','Networth','networth',
+hasNw ? '$'+shorten(Math.floor(best.networth)) : 'n/a',
+hasNw
+? (best.nwExact
+? 'items, pets, sacks and banked coins'
+: 'estimate only, items + purse')
+: 'networth data unavailable');
+
 html+=card('purse','Purse','money',
 '$'+shorten(Math.floor(m.purse||0)),null);
 
@@ -1897,7 +2160,7 @@ capped(questsDone,questsTotal),null);
 html+=card('secrets','Dungeon Secrets','secrets',
 shorten(achAmount(m.achievements,'treasure_hunter')),null);
 
-/* GEAR */
+
 
 const inv=m.inventories||{};
 
@@ -1915,8 +2178,7 @@ html+='<div class="section-title">Gear</div>';
 
 html+=panel('Armor',armor,null,4);
 
-/* The stats API exposes no equipment slot (necklace / cloak /
-   belt / gloves), so it is reported rather than faked. */
+
 html+='<div class="panel">'+
 '<div class="panel-head">Equipment'+
 '<span class="count">not in API</span>'+
@@ -2015,12 +2277,9 @@ document.getElementById('stats').innerHTML=html;
 
 }
 
-/* DONUTSMP */
 
-/* Pulls the stat pairs out of the page's schema.org block. The
-   markup is parsed rather than regexed so a change in attribute
-   order or whitespace does not silently break it. Returns null
-   when the player has no stats (the 404 page carries no block). */
+
+
 
 function donutStatsFromPage(page){
 
@@ -2105,12 +2364,7 @@ loading.innerText='Loading stats...';
 
 try{
 
-/* donutstats.net is a Next.js page behind Cloudflare, so it can
-   be neither fetched directly (no CORS) nor scraped server-side
-   (Turnstile returns 403). It does embed a schema.org JSON-LD
-   block carrying every stat as a name/value pair, which is
-   stable markup, so the page is read through a text proxy and
-   that block is parsed. Unknown players 404 with no JSON-LD. */
+
 
 const target=
 'https://www.donutstats.net/player/'+
@@ -2253,8 +2507,7 @@ function money(num){
     return '$' + shorten(num);
 }
 
-/* Kill/death ratio. With no deaths yet the ratio is undefined,
-   so the kill count is shown as-is rather than dividing by zero. */
+
 
 function kd(kills,deaths){
 
@@ -2273,9 +2526,7 @@ return (k/d).toFixed(2);
 
 }
 
-/* Playtime arrives in milliseconds. Long totals read badly in
-   raw hours (1845h), so days are broken out the way the source
-   page shows it: 76d 22h. */
+
 
 function playtime(ms){
 
